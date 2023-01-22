@@ -1,0 +1,26 @@
+---
+import Footer from "../components/Footer.astro"
+import Header from "../components/Header.astro"
+import Headline from "../components/Headline.astro"
+import "../styles/global.css"
+export interface Props {
+	title: string
+}
+
+const { title } = Astro.props
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<Headline>
+		<title>{title}</title>
+	</Headline>
+	<body>
+		{/* NAVBAR */}
+		<Header />
+		{/* BODY */}
+		<slot />
+		{/* FOOTER */}
+		<Footer />
+	</body>
+</html>

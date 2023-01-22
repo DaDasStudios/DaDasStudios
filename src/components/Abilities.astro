@@ -1,0 +1,33 @@
+---
+import RightArrow from "./RightArrow.astro"
+
+interface Props {
+	skills: {
+		name: string
+	}[]
+}
+
+const { skills } = Astro.props
+---
+
+<div
+	id="#skills"
+	class="-ml-8 bg-black ring-1 ring-cyan-700/10 self-center p-6 rounded-sm text-white font-medium relative after:absolute after:bg-cyan-300/70 after:rounded-sm after:inset-0 after:translate-x-3 after:translate-y-3 after:-z-10 after:shadow-2xl after:shadow-cyan-100"
+>
+	<ul class="flex flex-col gap-2" data-skills={skills.map(s => s.name)}>
+		{
+			skills.map((skill) => (
+				<li class="flex transition-transform hover:translate-x-1 cursor-pointer">
+					{skill.name}
+					<RightArrow className="ml-2 w-5"/>
+				</li>
+			))
+		}
+	</ul>
+</div>
+<script>
+	const skills = document.querySelector("[data-skills]").getAttribute("data-skills").split(",")
+	skills.forEach(skill => {
+		console.log(skill)
+	});
+</script>

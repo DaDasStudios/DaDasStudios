@@ -1,0 +1,28 @@
+---
+import NavElement from "./NavElement.astro";
+---
+
+<header class="border-b border-zinc-200">
+	<nav class="mx-auto max-w-6xl flex items-center justify-between py-8">
+		<a
+			href="/"
+			class="flex items-center justify-center transition-transform hover:-translate-y-1"
+		>
+			<img
+				class="w-14"
+				src="/images/logo-bg-removed.png"
+				alt="Dadas logo"
+			/>
+		</a>
+		<ul class="flex gap-8">
+			<NavElement
+				content="Proyectos"
+				href="/#projects"
+			/>
+			<NavElement
+				content="Contacto"
+				href="/contact"
+			/>
+		</ul>
+	</nav>
+</header>

@@ -1,0 +1,225 @@
+---
+import Layout from "../layouts/Layout.astro"
+import Card from "../components/Card.astro"
+import Abilities from "../components/Abilities.astro"
+import PlanFuture from "../components/PlanFuture.astro"
+---
+
+<Layout title="David Pérez - Desarrollador Web Full-stack">
+	<main class="min-h-screen">
+		<!-- PROFILE (MAIN SECTION) -->
+		<section class="text-center mt-36 max-w-5xl mx-auto">
+			<h1 class="font-bold text-5xl text-zinc-800">
+				¡Hola! Me llamo David,-desarrollador Web full-stack
+			</h1>
+			<p class="text-xl mt-8 mb-14 text-zinc-700">
+				Amo principalmente el Front-end y lo complemento con mis
+				hermosos diseños.
+			</p>
+			<img
+				class="w-56 rounded-full overflow-hidden shadow-xl mx-auto"
+				src="/images/logo-colors-shadow.png"
+				alt="Mi rostro"
+			/>
+			<!-- <img class="mx-auto block" src="/images/computer.png" alt="Computador"> -->
+		</section>
+		<!-- ABILITIES & TECHNOLOGIES -->
+		<section class="relative mt-24">
+			<span
+				class="absolute block left-0 right-0 top-1/2 bottom-1/2 -translate-y-1/2 h-4 -z-10 shadow-xl shadow-cyan-100 ring-1 ring-cyan-700/10 bg-cyan-300"
+			></span>
+			<div class="mx-auto flex justify-center max-w-5xl">
+				<div
+					id="#about"
+					class="text-center w-3/5 p-10 pr-10 bg-red-500 ring-1 ring-red-300 shadow-2xl shadow-red-100 rounded-sm relative before:bg-cyan-300/70 before:rounded-sm before:shadow-2xl before:shadow-cyan-100 before:inset-0 before:-translate-x-3 before:-translate-y-3 before:absolute before:-z-10"
+				>
+					<h1
+						class="font-bold text-3xl mb-6 tracking-tight text-white"
+					>
+						Perfil profesional
+					</h1>
+					<p
+						class="font-medium text-base text-red-50 leading-7 tracking-tight"
+					>
+						Actualmente soy estudiante de ingeniería electrónica, y
+						he sobresalido frente a los demás por mi compromiso e
+						inquietud por aprender. Con mis 3 años en el desarrollo,
+						constantemente estoy buscando formas de mejorar mis
+						habilidades y complementar mis conocimientos previos con
+						los nuevos. Busco combinar mis habilidades de software
+						con el hardware, para ser capaz de entender sistemas
+						complejos que usen estos conocimientos.
+					</p>
+				</div>
+				<Abilities
+					skills={[
+						{
+							name: "Back-end",
+						},
+						{
+							name: "Front-end",
+						},
+						{
+							name: "Sistemas",
+						},
+						{
+							name: "Extras",
+						},
+					]}
+				/>
+			</div>
+		</section>
+		<!-- PROJECTS -->
+		<section class="my-36" id="projects">
+			<div
+				class="bg-black py-24 relative after:absolute after:inset-0 after:bg-red-500 after:-z-10 after:translate-x-3 after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-x-3 before:-translate-y-3"
+			>
+				<div class="text-center">
+					<h1 class="text-5xl font-bold text-white">
+						Mis mejores proyectos
+					</h1>
+					<p
+						class="text-xl text-zinc-200 mt-10 mb-28 max-w-4xl mx-auto"
+					>
+						Aquí están los proyectos terminados más grandes que
+						tengo. Si quieres ver más, ećhale un ojo a mi <a
+							target="_blank"
+							class="text-red-400 hover:underline"
+							href="https://github.com/DaDasStudios"
+							>repositorio de Github.</a
+						>
+					</p>
+				</div>
+			</div>
+			<div class="grid grid-cols-3 gap-6 mx-auto max-w-5xl">
+				<Card
+					description="Limpieza de muebles con máquinas profesionales sin desgaste."
+					image="/images/whouse.png"
+					href="https://whouse.vercel.app"
+					star={true}
+				/>
+				<Card
+					description="Limpieza de muebles con máquinas profesionales sin desgaste."
+					image="/images/whouse.png"
+					href="https://whouse.vercel.app"
+				/>
+				<Card
+					description="Limpieza de muebles con máquinas profesionales sin desgaste."
+					image="/images/whouse.png"
+					href="https://whouse.vercel.app"
+				/>
+			</div>
+		</section>
+		<!-- FUTURE PLANS -->
+		<section class="mx-auto max-w-7xl">
+			<div class="text-center">
+				<h1 class="text-5xl font-bold text-zinc-800">
+					Lo que tengo planeado
+				</h1>
+				<p class="text-xl text-zinc-700 mt-10 mb-28 w-3/4 mx-auto">
+					La lista de cosas que tengo planeado aprender a futuro, para
+					enriquecerme de conocimiento como desarrollador.
+				</p>
+			</div>
+			<div
+				class="bg-black text-white grid grid-cols-3 gap-5 justify-around text-center shadow-md rounded-sm relative after:absolute after:inset-0 after:bg-red-500 after:-z-10 after:translate-x-3 after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-x-3 before:-translate-y-3"
+			>
+				<PlanFuture
+					title="Front-end"
+					description="Tecnologías y frameworks de Javascript que tengo planeado aprender en un futuro cercano."
+					subtitle="Herramientas"
+					technologies={[
+						"Angular",
+						"Vue",
+						"Svelte",
+						"Hugo",
+						"Flowbite",
+						"Python Web",
+					]}
+				>
+					<svg
+						slot="icon"
+						class="w-10 m-3"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
+						></path>
+					</svg>
+				</PlanFuture>
+				<PlanFuture
+					title="Back-end"
+					description="Conceptos y lenguajes que son de gran utilidad al momento de desarrollar."
+					subtitle="Frameworks & Servicios"
+					technologies={[
+						"Nestjs",
+						"Nextjs",
+						"Django",
+						"Spring",
+						"PostgreSQL",
+						"Redis",
+						"Firebase",
+						"Azure",
+					]}
+				>
+					<svg
+						slot="icon"
+						class="w-10 m-3"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3m16.5 0h.008v.008h-.008v-.008zm-3 0h.008v.008h-.008v-.008z"
+						></path>
+					</svg>
+				</PlanFuture>
+
+				<PlanFuture
+					title="Interés"
+					description="Variedad de cosas que me gustaría aprender por curiosidad y utilidad en general."
+					subtitle="Conocimiento"
+					technologies={[
+						"Game devolpment",
+						"Machine learning",
+						"OpenGL",
+						"QT en C++",
+						"Algebra lineal in programming",
+						"Data structures",
+						"SOLID",
+						"Manim",
+					]}
+				>
+					<svg
+						slot="icon"
+						class="w-10 m-3"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"
+						></path>
+					</svg>
+				</PlanFuture>
+			</div>
+		</section>
+	</main>
+</Layout>

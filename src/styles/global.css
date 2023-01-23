@@ -1,4 +1,25 @@
 html {
-    scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
+.skills-list {
+	@apply grid grid-cols-2 justify-center items-center gap-3 text-center px-4 pb-4;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+	@apply w-3 h-3;
+}
+
+::-webkit-scrollbar-track {
+	@apply rounded-sm bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply rounded-sm bg-red-600;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	@apply bg-red-700;
+}

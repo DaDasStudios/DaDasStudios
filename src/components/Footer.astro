@@ -20,7 +20,8 @@
 				>
 			</li>
 			<li>
-				<a target="_blank"
+				<a
+					target="_blank"
 					href="https://www.linkedin.com/in/jes%C3%BAs-p%C3%A9rez-pi%C3%B1eres-798613236/"
 					><svg
 						class="w-8"
@@ -53,7 +54,8 @@
 				>
 			</li>
 			<li>
-				<a target="_blank"
+				<a
+					target="_blank"
 					href="https://www.youtube.com/channel/UC120Xrak1Ccx32K12nElL7w"
 				>
 					<svg
@@ -69,6 +71,45 @@
 				>
 			</li>
 		</ul>
-		<p class="md:text-lg">&copy Todos los derechos reservados @Dadastudios</p>
+		<p class="md:text-lg">
+			&copy Todos los derechos reservados @Dadastudios
+		</p>
 	</div>
 </footer>
+<script>
+	const skillsBtns = document.querySelectorAll(
+		"[data-skill]"
+	) as NodeListOf<HTMLButtonElement>
+	const target = document.querySelector("[data-target]")
+	const profileContent = document.querySelector("#profile-content")
+
+	target
+		.querySelector("[data-target-close]")
+		.addEventListener("click", () => {
+			profileContent.classList.remove("max-lg:hidden")
+			target.classList.add("hidden")
+		})
+
+	skillsBtns.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			profileContent.classList.add("max-lg:hidden")
+			const content = btn
+				.querySelector("[data-content]")
+				.textContent.split(",")
+			const wrapper = target.querySelector("[data-target-content]")
+			wrapper.lastChild.remove()
+			const newUl = document.createElement("ul")
+			newUl.classList.add("skills-list")
+			wrapper.appendChild(newUl)
+			content.forEach((c) => {
+				const li = document.createElement("li")
+				li.textContent = c
+
+				newUl.appendChild(li)
+				
+			})
+
+			target.classList.remove("hidden")
+		})
+	})
+</script>

@@ -9,7 +9,9 @@ import PlanFuture from "../components/PlanFuture.astro"
 	<main class="min-h-screen">
 		<!-- PROFILE (MAIN SECTION) -->
 		<section class="text-center mt-36 max-w-5xl mx-auto">
-			<h1 class="font-bold text-2xl sm:text-4xl max-md:px-8 md:text-5xl text-zinc-800">
+			<h1
+				class="font-bold text-2xl sm:text-4xl max-md:px-8 md:text-5xl text-zinc-800"
+			>
 				¡Hola! Me llamo David,-desarrollador Web full-stack
 			</h1>
 			<p class="text-lg sm:text-xl px-4 mt-8 mb-14 text-zinc-700">
@@ -28,42 +30,95 @@ import PlanFuture from "../components/PlanFuture.astro"
 			<span
 				class="absolute block left-0 right-0 top-1/2 bottom-1/2 -translate-y-1/2 h-4 -z-10 shadow-xl shadow-cyan-100 ring-1 ring-cyan-700/10 bg-cyan-300"
 			></span>
-			<div class="mx-auto flex justify-center max-w-5xl">
+			<div
+				class="mx-auto max-w-5xl flex max-[500px]:flex-col max-[500px]:-mb-16 items-center justify-center"
+			>
 				<div
-					id="#about"
-					class="text-center w-3/5 p-10 pr-10 bg-red-500 ring-1 ring-red-300 shadow-2xl shadow-red-100 rounded-sm relative before:bg-cyan-300/70 before:rounded-sm before:shadow-2xl before:shadow-cyan-100 before:inset-0 before:-translate-x-3 before:-translate-y-3 before:absolute before:-z-10"
+					class="relative w-3/5 flex items-center justify-center"
+					id="profile-content"
 				>
-					<h1
-						class="font-bold text-3xl mb-6 tracking-tight text-white"
+					<span
+						class="bg-cyan-300/70 rounded-sm shadow-2xl shadow-cyan-100 inset-0 -translate-x-3 -translate-y-3 absolute -z-10"
+					></span>
+					<div
+						class="text-center p-10 pr-10 bg-red-500 ring-1 ring-red-300 shadow-2xl shadow-red-100 rounded-sm relative overflow-y-scroll max-h-[350px]"
 					>
-						Perfil profesional
-					</h1>
-					<p
-						class="font-medium text-base text-red-50 leading-7 tracking-tight"
-					>
-						Actualmente soy estudiante de ingeniería electrónica, y
-						he sobresalido frente a los demás por mi compromiso e
-						inquietud por aprender. Con mis 3 años en el desarrollo,
-						constantemente estoy buscando formas de mejorar mis
-						habilidades y complementar mis conocimientos previos con
-						los nuevos. Busco combinar mis habilidades de software
-						con el hardware, para ser capaz de entender sistemas
-						complejos que usen estos conocimientos.
-					</p>
+						<h1
+							class="font-bold text-xl sm:text-3xl mb-6 tracking-tight text-white"
+						>
+							Perfil profesional
+						</h1>
+						<p
+							class="font-medium text-sm sm:text-base text-red-50 leading-7 tracking-tight"
+						>
+							Actualmente soy estudiante de ingeniería
+							electrónica, y he sobresalido frente a los demás por
+							mi compromiso e inquietud por aprender. Con mis 3
+							años en el desarrollo, constantemente estoy buscando
+							formas de mejorar mis habilidades y complementar mis
+							conocimientos previos con los nuevos. Busco combinar
+							mis habilidades de software con el hardware, para
+							ser capaz de entender sistemas complejos que usen
+							estos conocimientos.
+						</p>
+					</div>
 				</div>
 				<Abilities
 					skills={[
 						{
 							name: "Back-end",
+							target: [
+								"Express.js",
+								"REST",
+								"GraphQL",
+								"MongoDB",
+								"MySQL",
+								"Flask",
+								"Passport",
+								"JWT",
+								"Handlebars",
+								"Ejs",
+								"Auth0",
+							],
 						},
 						{
 							name: "Front-end",
+							target: [
+								"React",
+								"Vanilla JS",
+								"Astro",
+								"Bootstrap",
+								"Tailwind",
+								"Bulma",
+								"Fetching",
+								"Formik",
+								"SASS",
+							],
 						},
 						{
 							name: "Sistemas",
+							target: [
+								"C++",
+								"Nodejs",
+								"Arduino",
+								"Java",
+								"Linux",
+								"Docker",
+								"Git",
+								"SQLite",
+							],
 						},
 						{
 							name: "Extras",
+							target: [
+								"Typescript",
+								"Agile",
+								"Pyfirmata",
+								"Serial",
+								"Manim",
+								"QT Python",
+								"Markdown",
+							],
 						},
 					]}
 				/>
@@ -72,7 +127,7 @@ import PlanFuture from "../components/PlanFuture.astro"
 		<!-- PROJECTS -->
 		<section class="my-36" id="projects">
 			<div
-				class="bg-black pb-10 md:pb-24 pt-24 relative after:absolute after:inset-0 after:bg-red-500 after:-z-10  after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-y-3"
+				class="bg-black pb-10 md:pb-24 pt-24 relative after:absolute after:inset-0 after:bg-red-500 after:-z-10 after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-y-3"
 			>
 				<div class="text-center max-sm:mx-4">
 					<h1 class="text-4xl md:text-5xl font-bold text-white">
@@ -91,7 +146,9 @@ import PlanFuture from "../components/PlanFuture.astro"
 					</p>
 				</div>
 			</div>
-			<div class="grid grid-cols-1 max-sm:mx-4 sm:grid-cols-3 gap-10 sm:gap-6 mx-6 md:mx-auto max-w-5xl -mt-20 md:-mt-36">
+			<div
+				class="grid grid-cols-1 max-sm:mx-4 sm:grid-cols-3 gap-10 sm:gap-6 mx-6 md:mx-auto max-w-5xl -mt-20 md:-mt-36"
+			>
 				<Card
 					description="Limpieza de muebles con máquinas profesionales sin desgaste."
 					image="/images/whouse.png"
@@ -99,14 +156,26 @@ import PlanFuture from "../components/PlanFuture.astro"
 					star={true}
 				/>
 				<Card
-					description="Limpieza de muebles con máquinas profesionales sin desgaste."
-					image="/images/whouse.png"
-					href="https://whouse.vercel.app"
+					description="Compartir tus libros favoritos con tus amigos o todo el mundo."
+					image="/images/books-app.png"
+					href="https://books-social-media.onrender.com"
+					star={true}
 				/>
 				<Card
-					description="Limpieza de muebles con máquinas profesionales sin desgaste."
-					image="/images/whouse.png"
-					href="https://whouse.vercel.app"
+					description="Clon exacto visual de la página principal de Aliexpress"
+					image="https://download.logo.wine/logo/AliExpress/AliExpress-Logo.wine.png"
+					href="https://aliexpress-clone-typescript-react.vercel.app"
+				/>
+				<Card
+					description="Página personal antigua orientada a mostrar proyectos."
+					image="/images/dadas-old.png"
+					href="https://dadastudios-old-website.onrender.com"
+				/>
+
+				<Card
+					description="Aplicación con variedad de utilidades para la vida diaria."
+					href="https://personal-management-app.onrender.com"
+					image="/images/personal-management-app.png"
 				/>
 			</div>
 		</section>
@@ -116,7 +185,9 @@ import PlanFuture from "../components/PlanFuture.astro"
 				<h1 class="text-4xl md:text-5xl font-bold text-zinc-800">
 					Lo que tengo planeado
 				</h1>
-				<p class="text-lg md:text-xl text-zinc-700 mt-10 mb-28 w-3/4 mx-auto">
+				<p
+					class="text-lg md:text-xl text-zinc-700 mt-10 mb-28 w-3/4 mx-auto"
+				>
 					La lista de cosas que tengo planeado aprender a futuro, para
 					enriquecerme de conocimiento como desarrollador.
 				</p>

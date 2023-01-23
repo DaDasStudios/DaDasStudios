@@ -1,1 +1,6 @@
 # Hi! I'm David, a full-stack web developer
+This is started as an experiment, I wanted to learn how to create videogames, but obviously noticed that programming is needed to even make a simple videogame. Firstly, I said: that looks too hard to learn, it probably is for the most smart ones. Then, four years later, I gave it a try and intent to create a game in Unity, but again, programming is required. But this time I actually wanted to learn how to do it, so regardless I tried to understand what was really doing while copying-pasting code.
+
+Then I thought: It's not that smart just to use others' code, let's try to learn programming from scratch and see what happens. On the morrow, I began to learn Pseint (a pseudo-programming language created for beginners at coding). In just one single week, I realised of results, so that boosted to me to keep straight face, because it seemed a good way. This process stays the same as the beginning, but with more discipline and spend time.
+
+Along with Youtubers, blogs, docs and books, I can say today I'm so proud of myself, because it actually changed me life as I'd never imagined. So if you want to see the tangible results, just take a look of my repos and portfolio, then you're gonna be one more witness of my progress.

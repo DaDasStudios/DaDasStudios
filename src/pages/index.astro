@@ -294,3 +294,40 @@ import PlanFuture from "../components/PlanFuture.astro"
 		</section>
 	</main>
 </Layout>
+<script>
+	const skillsBtns = document.querySelectorAll(
+		"[data-skill]"
+	) as NodeListOf<HTMLButtonElement>
+	const target = document.querySelector("[data-target]")
+	const profileContent = document.querySelector("#profile-content")
+
+	target
+		.querySelector("[data-target-close]")
+		.addEventListener("click", () => {
+			profileContent.classList.remove("max-lg:hidden")
+			target.classList.add("hidden")
+		})
+
+	skillsBtns.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			profileContent.classList.add("max-lg:hidden")
+			const content = btn
+				.querySelector("[data-content]")
+				.textContent.split(",")
+			const wrapper = target.querySelector("[data-target-content]")
+			wrapper.lastChild.remove()
+			const newUl = document.createElement("ul")
+			newUl.classList.add("skills-list")
+			wrapper.appendChild(newUl)
+			content.forEach((c) => {
+				const li = document.createElement("li")
+				li.textContent = c
+
+				newUl.appendChild(li)
+				
+			})
+
+			target.classList.remove("hidden")
+		})
+	})
+</script>

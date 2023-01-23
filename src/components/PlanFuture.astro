@@ -6,17 +6,17 @@ interface Props {
 	technologies: string[]
 }
 
-const { title, description, subtitle, technologies, icon } = Astro.props
+const { title, description, subtitle, technologies } = Astro.props
 ---
 
-<article class="p-10 relative after:absolute after:top-0 after:bottom-0 after:-right-0 after:w-1 after:bg-gradient-to-t after:from-red-500 after:to-cyan-500 last:after:from-transparent last:after:to-transparent">
+<article class="p-10 relative after:absolute lg:after:top-0 lg:after:bottom-0 lg:after:right-0 lg:after:w-1 lg:after:bg-gradient-to-t lg:after:from-red-500 lg:after:to-cyan-500 lg:last:after:from-transparent lg:last:after:to-transparent max-lg:after:bottom-0 max-lg:after:left-0 max-lg:after:right-0 max-lg:after:h-1 max-lg:after:bg-gradient-to-r max-lg:after:from-cyan-500 max-lg:after:to-red-500 max-lg:last:after:from-transparent last:after:to-transparent">
 	<header class="flex flex-col gap-3 items-center">
 		<span
 			class="inline-block rounded-lg bg-red-500 text-white shadow-md ring-1 ring-teal-900/10"
 		>
 			<slot name="icon"/>
 		</span>
-		<h3 class="font-bold text-2xl">{title}</h3>
+		<h3 class="font-bold max-sm:text-lg text-2xl">{title}</h3>
 		<p class="font-medium">
 			{description}
 		</p>

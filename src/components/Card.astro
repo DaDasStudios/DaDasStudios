@@ -11,7 +11,7 @@ const { description, image, href, star = false } = Astro.props
 ---
 
 <figure
-	class="relative rounded-sm ring-1 ring-zinc-50/50 shadow group h-52 flex items-center bg-white -mt-36 after:absolute after:left-[15%] after:right-[15%] after:-bottom-3 even:after:bg-red-500 odd:after:bg-cyan-400 after:h-3 after:-z-10" 
+	class="relative rounded-sm ring-1 ring-zinc-50/50 shadow group h-40 md:h-52 flex justify-center items-center bg-white after:absolute after:left-[15%] after:right-[15%] after:-bottom-3 even:after:bg-red-500 odd:after:bg-cyan-400 after:h-3 after:-z-10 max-sm:w-[70%] max-sm:mx-auto" 
 >
 	<img src={image} />
 	<figcaption

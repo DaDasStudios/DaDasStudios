@@ -150,6 +150,12 @@ import PlanFuture from "../components/PlanFuture.astro"
 				class="grid grid-cols-1 max-sm:mx-4 sm:grid-cols-3 gap-10 sm:gap-6 mx-6 md:mx-auto max-w-5xl -mt-20 md:-mt-36"
 			>
 				<Card
+					description="MedExcel es un gran recurso para estudiantes de medicina con preguntas del tema."
+					image="/images/medexcel.jpg"
+					href="https://medexcel.co.uk"
+					star={true}
+				/>
+				<Card
 					description="Limpieza de muebles con máquinas profesionales sin desgaste."
 					image="/images/whouse.png"
 					href="https://whouse.vercel.app"
@@ -324,7 +330,6 @@ import PlanFuture from "../components/PlanFuture.astro"
 				li.textContent = c
 
 				newUl.appendChild(li)
-				
 			})
 
 			target.classList.remove("hidden")

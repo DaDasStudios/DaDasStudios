@@ -1,0 +1,77 @@
+---
+import "../../styles/markdown.css"
+import { CollectionEntry, getCollection } from "astro:content"
+import Layout from "../../layouts/Layout.astro"
+
+interface Props {
+  entry: CollectionEntry<"project">
+}
+
+export const getStaticPaths = async () => {
+  const projectCollection = await getCollection("project")
+  return projectCollection.map(entry => {
+    return {
+      params: { slug: entry.slug },
+      props: { entry },
+    }
+  })
+}
+
+const { entry } = Astro.props
+const { title, description, image, techs, link } = entry.data
+const { Content, headings } = await entry.render()
+---
+
+<Layout title={`${title} | Projects`}>
+  <main class="min-h-screen bg-cover bg-print bg-fixed border-b-[20px] border-b-primary py-52 text-left px-12 sm:px-16 ">
+    <div class="markdown">
+      <section class="contents" id="main">
+        <h1>{title}</h1>
+        <p>{description}</p>
+        <div class="h-[400px] drop-shadow border-b-8 border-secondary rounded overflow-hidden">
+          <img
+            loading="lazy"
+            draggable="false"
+            class="object-cover h-full"
+            src={`/images/projects/${image}`}
+            alt={title}
+          />
+        </div>
+        <ul class="flex flex-wrap gap-4 justify-center w-full">
+          {
+            techs.map(tech => (
+              <li class="w-14 h-14 rounded-full shadow-md bg-white flex items-center justify-center relative group/tooltip">
+                <img class="w-8 h-8" src={`/images/techs/${tech.icon}`} alt={tech.name} />
+                <span class="text-black-100 font-medium px-2 py-1 text-center bg-white shadow rounded absolute hidden group-hover/tooltip:block select-none z-20">
+                  {tech.name}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="markdown-content contents" id="content">
+        <Content />
+      </section>
+      <div class="flex flex-wrap items-center justify-between gap-6 w-full">
+        {
+          link && (
+            <a
+              href={link}
+              class="text-white bg-primary hover:bg-primary-600 transition rounded font-medium px-8 py-4 text-lg"
+              target="_blank"
+            >
+              See Live
+            </a>
+          )
+        }
+        <a
+          class="self-end text-white bg-primary hover:bg-primary-600 transition rounded font-medium px-8 py-4 text-lg"
+          href="/projects"
+        >
+          Go Back</a
+        >
+      </div>
+    </div>
+  </main>
+</Layout>

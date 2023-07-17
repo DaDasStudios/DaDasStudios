@@ -1,0 +1,43 @@
+{
+  "title": "Portfolio",
+  "description": "Feel free to know me by visiting my personal portfolio which is now updated to 2.0.0 version with a lot more of content and its 3-dimensional colors.",
+  "details": "Welcome to my website portfolio, a curated showcase of my passion, skills, and creative endeavors. \n\nAs an electronic engineering student with a penchant for innovation and a love for technology, this platform serves as a digital canvas where I proudly present my diverse projects and achievements. From developing cutting-edge electronic circuits to crafting intricate code for software applications, each project embodies my dedication to pushing boundaries and seeking novel solutions. As you navigate through the portfolio, you will discover a collection of my finest works, meticulously designed to captivate and inspire. With a focus on user experience and aesthetics, I have poured my heart into every detail, striving to create an engaging and seamless journey for visitors. \n\nThis portfolio not only reflects my technical expertise but also embodies my enthusiasm for continuous learning and growth. Join me on this exciting voyage as we explore the intersection of engineering and creativity, and witness how my passion for electronic engineering comes to life through the projects showcased here.",
+  "image": "/images/work/portfolio-mokcup.png",
+  "link": "https://dadastudios-portfolio.vercel.app",
+  "repos": [
+    {
+      "name": "Front-end",
+      "link": "https://github.com/DaDasStudios/DaDasStudios"
+    }
+  ],
+  "techs": [
+    {
+      "name": "Typescript",
+      "icon": "typescript.svg"
+    },
+    {
+      "name": "Astro",
+      "icon": "astro.svg"
+    },
+    {
+      "name": "Tailwind",
+      "icon": "tailwind.svg"
+    },
+    {
+      "name": "CSS",
+      "icon": "css-3.svg"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "mongo.svg"
+    },
+    {
+      "name": "Express",
+      "icon": "express.png"
+    },
+    {
+      "name": "Git",
+      "icon": "git.svg"
+    }
+  ]
+}

@@ -1,338 +1,129 @@
 ---
+import { getCollection } from "astro:content"
 import Layout from "../layouts/Layout.astro"
-import Card from "../components/Card.astro"
-import Abilities from "../components/Abilities.astro"
-import PlanFuture from "../components/PlanFuture.astro"
+import ExperienceElement from "../components/ExperienceElement.astro"
+import Skills from "../components/Skills.astro"
+import HobbieCard from "../components/HobbieCard.astro"
+import RightArrow from "../components/RightArrow.astro"
+
+import { landingPageDescription, landingPageTitle, hobbies } from "../data"
+
+const experiences = await getCollection("work")
 ---
 
-<Layout title="David Pérez - Desarrollador Web Full-stack">
-	<main class="min-h-screen">
-		<!-- PROFILE (MAIN SECTION) -->
-		<section class="text-center mt-36 max-w-5xl mx-auto">
-			<h1
-				class="font-bold text-2xl sm:text-4xl max-md:px-8 md:text-5xl text-zinc-800"
-			>
-				¡Hola! Me llamo David,-desarrollador Web full-stack
-			</h1>
-			<p class="text-lg sm:text-xl px-4 mt-8 mb-14 text-zinc-700">
-				Amo principalmente el Front-end y lo complemento con mis
-				hermosos diseños.
-			</p>
-			<img
-				class="w-36 md:w-56 rounded-full overflow-hidden shadow-xl mx-auto"
-				src="/images/logo-colors-shadow.png"
-				alt="Mi rostro"
-			/>
-			<!-- <img class="mx-auto block" src="/images/computer.png" alt="Computador"> -->
-		</section>
-		<!-- ABILITIES & TECHNOLOGIES -->
-		<section class="relative mt-24">
-			<span
-				class="absolute block left-0 right-0 top-1/2 bottom-1/2 -translate-y-1/2 h-4 -z-10 shadow-xl shadow-cyan-100 ring-1 ring-cyan-700/10 bg-cyan-300"
-			></span>
-			<div
-				class="mx-auto max-w-5xl flex max-[500px]:flex-col max-[500px]:-mb-16 items-center justify-center"
-			>
-				<div
-					class="relative w-3/5 flex items-center justify-center"
-					id="profile-content"
-				>
-					<span
-						class="bg-cyan-300/70 rounded-sm shadow-2xl shadow-cyan-100 inset-0 -translate-x-3 -translate-y-3 absolute -z-10"
-					></span>
-					<div
-						class="text-center p-10 pr-10 bg-red-500 ring-1 ring-red-300 shadow-2xl shadow-red-100 rounded-sm relative overflow-y-scroll max-h-[350px]"
+<Layout title="Desarrollador Web Full-stack">
+	<main>
+		<!-- HOME HERO -->
+		<section class="min-h-screen relative bg-blurry bg-cover pb-24" id="home-hero">
+			<div class="flex flex-col pt-[280px] justify-center items-center gap-14 max-w-5xl mx-auto text-center">
+				<h1 class="font-bold max-md:px-8 text-4xl sm:text-5xl md:text-7xl text-black-100">
+					{landingPageTitle}
+				</h1>
+				<p class="text-lg sm:text-2xl px-4 text-black-200">
+					{landingPageDescription}
+				</p>
+				<div class="flex gap-7 justify-center items-center">
+					<a
+						href="#experience"
+						class="text-lg sm:text-xl px-7 py-5 font-medium bg-primary text-white rounded transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary"
+						>Experience</a
 					>
-						<h1
-							class="font-bold text-xl sm:text-3xl mb-6 tracking-tight text-white"
-						>
-							Perfil profesional
-						</h1>
-						<p
-							class="font-medium text-sm sm:text-base text-red-50 leading-7 tracking-tight"
-						>
-							Actualmente soy estudiante de ingeniería
-							electrónica, y he sobresalido frente a los demás por
-							mi compromiso e inquietud por aprender. Con mis 3
-							años en el desarrollo, constantemente estoy buscando
-							formas de mejorar mis habilidades y complementar mis
-							conocimientos previos con los nuevos. Busco combinar
-							mis habilidades de software con el hardware, para
-							ser capaz de entender sistemas complejos que usen
-							estos conocimientos.
-						</p>
-					</div>
+					<a
+						href="/projects"
+						class="text-lg sm:text-xl px-7 py-5 font-medium bg-secondary text-white rounded transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-secondary"
+						>Projects</a
+					>
 				</div>
-				<Abilities
-					skills={[
-						{
-							name: "Back-end",
-							target: [
-								"Express.js",
-								"REST",
-								"GraphQL",
-								"MongoDB",
-								"MySQL",
-								"Flask",
-								"Passport",
-								"JWT",
-								"Handlebars",
-								"Ejs",
-								"Auth0",
-							],
-						},
-						{
-							name: "Front-end",
-							target: [
-								"React",
-								"Vanilla JS",
-								"Astro",
-								"Bootstrap",
-								"Tailwind",
-								"Bulma",
-								"Fetching",
-								"Formik",
-								"SASS",
-							],
-						},
-						{
-							name: "Sistemas",
-							target: [
-								"C++",
-								"Nodejs",
-								"Arduino",
-								"Java",
-								"Linux",
-								"Docker",
-								"Git",
-								"SQLite",
-							],
-						},
-						{
-							name: "Extras",
-							target: [
-								"Typescript",
-								"Agile",
-								"Pyfirmata",
-								"Serial",
-								"Manim",
-								"QT Python",
-								"Markdown",
-							],
-						},
-					]}
-				/>
+			</div>
+			<div class="absolute bottom-4 w-full flex justify-center">
+				<a aria-hidden="true" href="/#about" class="text-black hover:text-primary animate-bounce">
+					<RightArrow className="rotate-90 w-8" />
+				</a>
+			</div>
+			<span class="absolute inset-x-0 bg-primary h-5 z-10 -bottom-5"></span>
+		</section>
+
+		<!-- ABOUT -->
+		<section class="relative min-h-[200px] pt-5" id="about">
+			<div class="mx-6 md:mx-12 xl:mx-auto flex flex-col gap-20 mt-32 max-w-7xl">
+				<h2 class="font-bold text-4xl sm:text-5xl text-center text-black-100">About Me</h2>
+				<div class="grid grid-cols-1 xl:grid-cols-2 gap-14">
+					<div class="flex flex-col gap-4 leading-9 text-lg text-black-200 text-left">
+						<p>
+							Hello, I'm David Pérez, a professional <b>Full-stack Web Developer</b> passionte for crafting innovative and
+							user-centric digital solutions. With +2 years of experience, I have honed my skills in both <b
+								>front-end</b
+							>
+							and <b>back-end</b> development, utilizing a wide range of technologies and frameworks.
+						</p>
+						<p>
+							From conceptualization to deployment, I thrive in creating responsive, scalable, and visually appealing
+							web applications. Proficient in languages such as <b>HTML, CSS, Typescript</b>, and have expertise in
+							frameworks like <b>React and NextJS</b>.
+						</p>
+						<p>
+							A strong understanding of database systems and server-side technologies allows me to build robust and
+							efficient back-end architectures. Whether it's crafting seamless user experiences or solving complex
+							technical <b>challenges</b>.
+						</p>
+						<a
+							href="/contact"
+							class="max-xl:self-center mt-4 bg-primary px-12 py-3 text-white font-medium rounded transition-colors hover:bg-primary-600 w-fit"
+							>Contact</a
+						>
+					</div>
+					<Skills />
+				</div>
 			</div>
 		</section>
-		<!-- PROJECTS -->
-		<section class="my-36" id="projects">
-			<div
-				class="bg-black pb-10 md:pb-24 pt-24 relative after:absolute after:inset-0 after:bg-red-500 after:-z-10 after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-y-3"
-			>
+
+		<!-- EXPERIENCE -->
+		<section class="border-t-[20px] border-t-primary mt-36" id="experience">
+			<div class="bg-black py-24 border-b-[20px] border-b-primary">
 				<div class="text-center max-sm:mx-4">
-					<h1 class="text-4xl md:text-5xl font-bold text-white">
-						Mis mejores proyectos
-					</h1>
-					<p
-						class="max-md:max-w-md text-base md:text-xl text-zinc-200 mt-10 mb-28 max-w-4xl mx-auto"
-					>
-						Aquí están los proyectos terminados más grandes que
-						tengo. Si quieres ver más, ećhale un ojo a mi <a
-							target="_blank"
-							class="text-red-400 hover:underline"
-							href="https://github.com/DaDasStudios"
-							>repositorio de Github.</a
-						>
+					<h3 class="text-4xl md:text-5xl font-bold text-white">Career Highlights</h3>
+					<p class="max-md:max-w-md text-lg md:text-xl text-zinc-200 mt-10 max-w-4xl mx-auto leading-8">
+						Dive into the details of my past engagements, projects, and roles to get a comprehensive understanding of my <span
+							class="text-secondary-600 font-medium">professional background</span
+						> and track record.
 					</p>
 				</div>
 			</div>
-			<div
-				class="grid grid-cols-1 max-sm:mx-4 sm:grid-cols-3 gap-10 sm:gap-6 mx-6 md:mx-auto max-w-5xl -mt-20 md:-mt-36"
-			>
-				<Card
-					description="MedExcel es un gran recurso para estudiantes de medicina con preguntas del tema."
-					image="/images/medexcel.jpg"
-					href="https://medexcel.co.uk"
-					star={true}
-				/>
-				<Card
-					description="Limpieza de muebles con máquinas profesionales sin desgaste."
-					image="/images/whouse.png"
-					href="https://whouse.vercel.app"
-					star={true}
-				/>
-				<Card
-					description="Compartir tus libros favoritos con tus amigos o todo el mundo."
-					image="/images/books-app.png"
-					href="https://books-social-media.onrender.com"
-					star={true}
-				/>
-				<Card
-					description="Clon exacto visual de la página principal de Aliexpress"
-					image="https://download.logo.wine/logo/AliExpress/AliExpress-Logo.wine.png"
-					href="https://aliexpress-clone-typescript-react.vercel.app"
-				/>
-				<Card
-					description="Página personal antigua orientada a mostrar proyectos."
-					image="/images/dadas-old.png"
-					href="https://dadastudios-old-website.onrender.com"
-				/>
+			<div class="bg-plane bg-cover bg-repeat pb-36 pt-20 min-h-screen mx-12 sm:mx-16 xl:mx-auto">
+				<div class="flex flex-col mx-auto max-w-7xl">
+					{experiences.map(work => <ExperienceElement entry={work} />)}
+				</div>
+				<div class="flex flex-col items-center gap-10 text-center mt-16">
+					<h4 class="font-bold text-3xl sm:text-4xl text-black-100">Ready for more?</h4>
+					<p class="text-lg text-black-200 max-w-4xl">
+						Discover my latest projects and innovations, showcasing my passion for pushing boundaries and embracing
+						creativity.
+					</p>
 
-				<Card
-					description="Aplicación con variedad de utilidades para la vida diaria."
-					href="https://personal-management-app.onrender.com"
-					image="/images/personal-management-app.png"
-				/>
+					<a
+						href="/projects"
+						class="bg-primary px-8 sm:px-16 py-4 font-medium text-white text-lg rounded transition hover:shadow-2xl hover:shadow-primary"
+					>
+						Let's go</a
+					>
+				</div>
 			</div>
 		</section>
-		<!-- FUTURE PLANS -->
-		<section class="mx-10 xl:mx-auto max-w-7xl">
-			<div class="text-center">
-				<h1 class="text-4xl md:text-5xl font-bold text-zinc-800">
-					Lo que tengo planeado
-				</h1>
-				<p
-					class="text-lg md:text-xl text-zinc-700 mt-10 mb-28 w-3/4 mx-auto"
-				>
-					La lista de cosas que tengo planeado aprender a futuro, para
-					enriquecerme de conocimiento como desarrollador.
-				</p>
-			</div>
-			<div
-				class="bg-black text-white grid max-sm:mx-3 max-md:mx-12 max-lg:mx-28 grid-cols-1 lg:grid-cols-3 gap-5 justify-around text-center shadow-md rounded-sm relative after:absolute after:inset-0 after:bg-red-500 after:-z-10 after:translate-x-3 after:translate-y-3 a before:absolute before:inset-0 before:bg-cyan-500 before:-z-10 before:-translate-x-3 before:-translate-y-3"
-			>
-				<PlanFuture
-					title="Front-end"
-					description="Tecnologías y frameworks de Javascript que tengo planeado aprender en un futuro cercano."
-					subtitle="Herramientas"
-					technologies={[
-						"Angular",
-						"Vue",
-						"Svelte",
-						"Hugo",
-						"Flowbite",
-						"Python Web",
-					]}
-				>
-					<svg
-						slot="icon"
-						class="w-10 m-3"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						aria-hidden="true"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
-						></path>
-					</svg>
-				</PlanFuture>
-				<PlanFuture
-					title="Back-end"
-					description="Conceptos y lenguajes que son de gran utilidad al momento de desarrollar."
-					subtitle="Frameworks & Servicios"
-					technologies={[
-						"Nestjs",
-						"Nextjs",
-						"Django",
-						"Spring",
-						"PostgreSQL",
-						"Redis",
-						"Firebase",
-						"Azure",
-					]}
-				>
-					<svg
-						slot="icon"
-						class="w-10 m-3"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						aria-hidden="true"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3m16.5 0h.008v.008h-.008v-.008zm-3 0h.008v.008h-.008v-.008z"
-						></path>
-					</svg>
-				</PlanFuture>
 
-				<PlanFuture
-					title="Interés"
-					description="Variedad de cosas que me gustaría aprender por curiosidad y utilidad en general."
-					subtitle="Conocimiento"
-					technologies={[
-						"Game devolpment",
-						"Machine learning",
-						"OpenGL",
-						"QT en C++",
-						"Algebra lineal in programming",
-						"Data structures",
-						"SOLID",
-						"Manim",
-					]}
-				>
-					<svg
-						slot="icon"
-						class="w-10 m-3"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						aria-hidden="true"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"
-						></path>
-					</svg>
-				</PlanFuture>
+		<!-- EXTRAS -->
+		<section class="border-y-[20px] border-y-primary py-36" id="extras">
+			<div class="mx-12 xl:mx-auto">
+				<div class="text-center max-sm:mx-4">
+					<h3 class="text-4xl md:text-5xl font-bold text-black-100">Extras</h3>
+					<p class="max-md:max-w-md text-lg md:text-xl text-black-200 mt-10 max-w-4xl leading-8">
+						Beyond my professional endeavors, I am a passionate adventurer who thrives on exploring new horizons in
+						other aspects of my life.
+					</p>
+				</div>
+				<div class="mt-16 grid grid-cols-1 xl:grid-cols-3 gap-10 justify-center max-w-lg xl:max-w-6xl mx-auto">
+					{hobbies.map(h => <HobbieCard title={h.title} description={h.description} link={h.link} />)}
+				</div>
 			</div>
 		</section>
 	</main>
 </Layout>
-<script>
-	const skillsBtns = document.querySelectorAll(
-		"[data-skill]"
-	) as NodeListOf<HTMLButtonElement>
-	const target = document.querySelector("[data-target]")
-	const profileContent = document.querySelector("#profile-content")
-
-	target
-		.querySelector("[data-target-close]")
-		.addEventListener("click", () => {
-			profileContent.classList.remove("max-lg:hidden")
-			target.classList.add("hidden")
-		})
-
-	skillsBtns.forEach((btn) => {
-		btn.addEventListener("click", () => {
-			profileContent.classList.add("max-lg:hidden")
-			const content = btn
-				.querySelector("[data-content]")
-				.textContent.split(",")
-			const wrapper = target.querySelector("[data-target-content]")
-			wrapper.lastChild.remove()
-			const newUl = document.createElement("ul")
-			newUl.classList.add("skills-list")
-			wrapper.appendChild(newUl)
-			content.forEach((c) => {
-				const li = document.createElement("li")
-				li.textContent = c
-
-				newUl.appendChild(li)
-			})
-
-			target.classList.remove("hidden")
-		})
-	})
-</script>

@@ -3,6 +3,8 @@ import Footer from "../components/Footer.astro"
 import Header from "../components/Header.astro"
 import Headline from "../components/Headline.astro"
 import "../styles/global.css"
+import { siteTitlePrefix } from "../data"
+
 export interface Props {
 	title: string
 }
@@ -13,9 +15,9 @@ const { title } = Astro.props
 <!DOCTYPE html>
 <html lang="en">
 	<Headline>
-		<title>{title}</title>
+		<title>{`${title} | ${siteTitlePrefix}`}</title>
 	</Headline>
-	<body>
+	<body >
 		{/* NAVBAR */}
 		<Header />
 		{/* BODY */}

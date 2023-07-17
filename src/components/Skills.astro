@@ -1,0 +1,62 @@
+---
+import { professionalSkills } from "../data"
+
+for (const groupName in professionalSkills) {
+	if (professionalSkills[groupName].length < 20) {
+		professionalSkills[groupName] = [
+			...professionalSkills[groupName],
+			...professionalSkills[groupName],
+			...professionalSkills[groupName],
+		]
+	}
+}
+---
+
+<style>
+	.marquee {
+		animation: marquee linear infinite;
+		animation-duration: 100s;
+	}
+	.marquee:hover {
+		animation-play-state: paused;
+		will-change: transform;
+	}
+
+	@keyframes marquee {
+		0% {
+			transform: translateZ(0);
+		}
+		100% {
+			transform: translate3d(-100%, 0, 0);
+		}
+	}
+</style>
+<div class="grid grid-rows-3 gap-8 self-start">
+	{
+		Object.entries(professionalSkills).map(([groupName, techs]) => (
+			<div class="odd:bg-primary-50 odd:text-primary-600 even:bg-secondary-100 even:text-secondary-900 rounded-md relative overflow-x-hidden max-w-[230px] xs:max-w-sm sm:max-w-xl mx-auto">
+				<h4 class="block font-medium text-left text-lg tracking-wide mb-4 px-6 mt-4">{groupName}</h4>
+				<div role="marquee" class={`text-black-200 my-6 marquee`} data-marquee>
+					<ul class="flex flex-nowrap gap-4">
+						{techs.map(tech => (
+							<li
+								class={`grow-0 shrink-0 w-14 h-14 rounded-full bg-white relative group/tooltip flex items-center justify-center shadow-lg`}
+							>
+								<img class="w-8 h-8" src={`/images/techs/${tech.icon}`} alt={tech.name} />
+								<span class="text-black-100 font-medium px-2 py-1 text-center bg-white shadow rounded absolute hidden group-hover/tooltip:block select-none">{tech.name}</span>
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		))
+	}
+</div>
+<script>
+	const o = 8
+	const marquee = document.querySelector("[data-marquee]") as HTMLElement
+
+	new ResizeObserver(([t]) => {
+		marquee.style.animationDuration = `${t.contentRect.width / o}s`
+	}).observe(marquee)
+</script>

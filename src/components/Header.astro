@@ -1,28 +1,42 @@
 ---
-import NavElement from "./NavElement.astro";
+import NavElement from "./NavElement.astro"
+import { navbarElements } from "../data"
 ---
 
-<header class="border-b border-zinc-200">
-	<nav class="px-10 sm:mx-auto max-w-6xl flex items-center justify-center sm:justify-between py-8">
-		<a
-			href="/"
-			class="flex items-center justify-center transition-transform hover:-translate-y-1"
-		>
-			<img
-				class="w-14 mr-8"
-				src="/images/logo-bg-removed.png"
-				alt="Dadas logo"
-			/>
+<header class="border-b border-zinc-200 top-0 inset-x-0 bg-white fixed z-30">
+	<nav class="px-10 sm:mx-auto max-w-6xl flex items-center justify-between py-8">
+		<a href="/" class="flex items-center justify-center transition-transform hover:-translate-y-1">
+			<img class="w-14 mr-8" src="/images/logo-bg-removed.png" alt="Dadas logo" />
 		</a>
-		<ul class="flex gap-8">
-			<NavElement
-				content="Proyectos"
-				href="/#projects"
-			/>
-			<NavElement
-				content="Contacto"
-				href="/contact"
-			/>
+		<ul class="hidden sm:flex items-center gap-14">
+			{navbarElements.map(element => <NavElement name={element.name} link={element.link} />)}
+			<li>
+				<a
+					href="/contact"
+					class="bg-primary px-4 py-3 text-white font-medium rounded transition-colors hover:bg-primary-600">Contact</a
+				>
+			</li>
 		</ul>
+		<div class="sm:hidden block bg-white shadow-md fixed inset-y-0 px-12 xs:max-sm:px-16 py-12 transition-all duration-500 -left-full overflow-hidden" data-target>
+			<ul class="flex flex-col justify-start items-start gap-8">
+				{navbarElements.map(element => <NavElement name={element.name} link={element.link} />)}
+				<NavElement name="Contact" link="/contact" />
+			</ul>
+		</div>
+		<button aria-label="navigation" class="sm:hidden flex flex-col gap-1 w-[25px] group/button" data-collapse>
+			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
+			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
+			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
+		</button>
 	</nav>
 </header>
+<script>
+	const target = document.querySelector("[data-target]") as HTMLDivElement
+	const collapse = document.querySelector("[data-collapse]") as HTMLButtonElement
+
+	collapse.addEventListener("click", () => {
+		const className = "left-0"
+		target.classList.toggle("-left-full")
+		target.classList.toggle(className)
+	})
+</script>

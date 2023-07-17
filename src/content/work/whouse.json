@@ -1,0 +1,59 @@
+{
+  "title": "Whouse",
+  "description": "A cleaning service offered in a different way of the highest quality thanks to our powerful specialized machines, because we want to make a difference.",
+  "details": "Experience a cleaning service like no other, redefined with the utmost commitment to excellence and powered by our cutting-edge specialized machines. Our goal is to revolutionize the industry, offering a level of quality and precision that sets us apart from the rest. With a dedicated team of skilled professionals and state-of-the-art equipment, we take pride in delivering results that exceed expectations. From tackling stubborn stains to restoring the luster of your spaces, we leave no corner untouched. \n\nEmbracing innovation, we continuously invest in advanced cleaning technologies to ensure the most efficient and environmentally-friendly solutions. We believe in making a difference, not just in the cleanliness of your environment, but also in the way we redefine the cleaning experience. Discover the transformative power of our cleaning service, tailored to enhance your spaces and elevate your comfort to new heights.",
+  "image": "/images/work/whouse-mokcup.png",
+  "link": "https://whouse.vercel.app",
+  "repos": [
+    {
+      "name": "Back-end",
+      "link": "https://github.com/DaDasStudios/Whouse-backend"
+    },
+    {
+      "name": "Front-end",
+      "link": "https://github.com/DaDasStudios/Whouse"
+    }
+  ],
+  "techs": [
+    {
+      "name": "Typescript",
+      "icon": "typescript.svg"
+    },
+    {
+      "name": "React",
+      "icon": "react.svg"
+    },
+    {
+      "name": "Astro",
+      "icon": "astro.svg"
+    },
+    {
+      "name": "Tailwind",
+      "icon": "tailwind.svg"
+    },
+    {
+      "name": "GraphQL",
+      "icon": "graphql.svg"
+    },
+    {
+      "name": "Express",
+      "icon": "express.png"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "mongo.svg"
+    },
+    {
+      "name": "JWT",
+      "icon": "jwt.png"
+    },
+    {
+      "name": "Git",
+      "icon": "git.svg"
+    },
+    {
+      "name": "Linux",
+      "icon": "linux.svg"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "title": "Medexcel",
+  "description": "MedExcel is a great revision resource for Medical Students supplying questions from a range of different specialties.",
+  "details": "MedExcel stands as an invaluable and comprehensive revision resource catered specifically to the needs of medical students. Its rich and diverse database encompasses a wide array of practice questions spanning various medical specialties, making it an indispensable tool for those embarking on their medical journey. Whether delving into cardiology, neurology, or obstetrics, MedExcel provides an extensive array of questions that mirror the complexity and depth of real-life medical scenarios. \n\nThis resource not only fosters a deep understanding of medical concepts but also nurtures critical thinking and problem-solving skills essential for medical professionals. With its user-friendly interface and carefully curated content, MedExcel empowers medical students to assess their knowledge, identify areas for improvement, and elevate their confidence in approaching challenging medical examinations. For aspiring doctors seeking a comprehensive and robust revision aid, MedExcel stands as a trusted companion on their path to medical excellence.",
+  "image": "/images/work/medexcel-mokcup.png",
+  "link": "https://medexcel.co.uk",
+  "repos": [
+    {
+      "name": "Back-end",
+      "link": "https://github.com/DaDasStudios/MedExcel-backend"
+    },
+    {
+      "name": "Front-end",
+      "link": "https://github.com/DaDasStudios/MedExcel-frontend"
+    }
+  ],
+  "techs": [
+    {
+      "name": "Vite",
+      "icon": "vite.png"
+    },
+    {
+      "name": "Typescript",
+      "icon": "typescript.svg"
+    },
+    {
+      "name": "React",
+      "icon": "react.svg"
+    },
+    {
+      "name": "React Router",
+      "icon": "react-router.png"
+    },
+    {
+      "name": "Tailwind",
+      "icon": "tailwind.svg"
+    },
+    {
+      "name": "HeadlessUI",
+      "icon": "headlessui.png"
+    },
+    {
+      "name": "Express",
+      "icon": "express.png"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "mongo.svg"
+    },
+    {
+      "name": "Cloudinary",
+      "icon": "cloudinary.svg"
+    },
+    {
+      "name": "JWT",
+      "icon": "jwt.png"
+    },
+    {
+      "name": "Git",
+      "icon": "git.svg"
+    },
+    {
+      "name": "Docker",
+      "icon": "docker.svg"
+    },
+    {
+      "name": "Linux",
+      "icon": "linux.svg"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+---
+import { CollectionEntry } from "astro:content"
+
+export interface Props {
+	entry: CollectionEntry<"work">
+}
+
+const { entry } = Astro.props
+const { description, image, link, title } = entry.data
+---
+
+<div class="flex max-lg:flex-wrap gap-x-14">
+	<img class="w-3/5 max-lg:grow" draggable="false" loading="lazy" src={image} alt={title} />
+	<div class="flex-initial flex flex-col gap-8 self-center">
+		<h4 class="font-bold text-3xl sm:text-4xl xl:text-5xl tracking-wide text-black-100">{title}</h4>
+		<p class="text-black-200 leading-8 text-left text-lg">{description}</p>
+		<div class="flex gap-8 justify-start items-start">
+			<a
+				class="bg-primary px-6 lg:px-10 py-4 font-medium text-white text-center w-fit rounded text-lg transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary"
+				href={`/works/${entry.id}`}>See More</a
+			>
+			<a
+				class="bg-secondary px-6 lg:px-10 py-4 font-medium text-white text-center w-fit rounded text-lg transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-secondary"
+				href={link}
+				target="_blank">Visit</a
+			>
+		</div>
+	</div>
+</div>

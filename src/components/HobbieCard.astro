@@ -1,0 +1,33 @@
+---
+import RightArrow from "./RightArrow.astro"
+
+interface Props {
+	title: string
+	description: string
+	link?: string
+}
+
+const { title, description, link } = Astro.props
+---
+
+<div
+	class="odd:bg-primary-50 odd:text-primary-600 even:bg-secondary-100 even:text-secondary-900 group/card text-lg text-left flex flex-col justify-between gap-6 p-7 rounded-md"
+>
+	<div class="flex flex-col gap-6">
+		<h5 class="text-3xl font-semibold tracking-wide">{title}</h5>
+		<p class="leading-8 group-odd/card:text-primary-500 group-even/card:text-secondary-800 font-medium">
+			{description}
+		</p>
+	</div>
+	{
+		link && (
+			<a
+				href={link}
+				target="_blank"
+				class="w-fit flex mt-4 gap-4 py-4 px-6 transition group-odd/card:bg-primary-500 hover:group-odd/card:bg-primary-600 group-even/card:bg-secondary hover:group-even/card:bg-secondary-700 text-white font-medium rounded"
+			>
+				<span>Explore</span> <RightArrow className="w-6" />
+			</a>
+		)
+	}
+</div>

@@ -1,0 +1,23 @@
+---
+import RightArrow from "../components/RightArrow.astro";
+import Layout from "../layouts/Layout.astro"
+---
+
+<Layout title="404 Not Found Error">
+  <main class="min-h-screen bg-blurry bg-cover">
+    <div class="h-screen flex flex-col items-center justify-center gap-8 mx-auto max-w-xl text-center">
+      <h1 class="text-7xl text-black-100 font-bold">Ups... Page Not Found</h1>
+      <p class="text-xl text-black-200">It seems the page you're looking doesn't exist or isn't available</p>
+      <button role="link" class="px-10 py-4 rounded bg-primary hover:bg-primary-600 transition-colors text-white font-medium text-lg flex gap-2 items-center justify-between">
+        <RightArrow className="w-6 -rotate-180"/>
+        <span>Go Back</span>
+      </button>
+    </div>
+  </main>
+</Layout>
+<script>
+  const button = document.querySelector("button") as HTMLButtonElement
+  button.addEventListener("click", () => {
+    window.history.back()
+  })
+</script>

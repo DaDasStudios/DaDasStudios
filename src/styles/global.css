@@ -1,5 +1,11 @@
+@tailwind base;
+
 html {
 	scroll-behavior: smooth;
+}
+
+.form-control {
+	@apply text-lg font-medium p-5 rounded-md bg-primary-100 text-primary placeholder:text-primary focus:border-2 focus:border-primary focus:ring-4 focus:ring-primary-200 focus:outline-none;
 }
 
 .skills-list {
@@ -17,9 +23,9 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-	@apply rounded-sm bg-red-600;
+	@apply rounded-sm bg-primary;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	@apply bg-red-700;
+	@apply bg-primary-600;
 }

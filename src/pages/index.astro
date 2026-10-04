@@ -1,129 +1,157 @@
 ---
-import { getCollection } from "astro:content"
+import ButtonLink from "../components/ButtonLink.astro"
+import ExperienceEntry from "../components/ExperienceEntry.astro"
+import HighlightsCarousel from "../components/HighlightsCarousel.astro"
+import LabDoor from "../components/LabDoor.astro"
+import SkillRows from "../components/SkillRows.astro"
+import StatCards from "../components/StatCards.astro"
+import StoryTile from "../components/StoryTile.astro"
+import { about, hero, sections } from "../data/personal"
+import { resumes, site, socials } from "../data/site"
 import Layout from "../layouts/Layout.astro"
-import ExperienceElement from "../components/ExperienceElement.astro"
-import Skills from "../components/Skills.astro"
-import HobbieCard from "../components/HobbieCard.astro"
-import RightArrow from "../components/RightArrow.astro"
+import { getExperience, getHighlights, getProjects, getStories } from "../lib/content"
 
-import { landingPageDescription, landingPageTitle, hobbies } from "../data"
+const [highlights, experience, hardware, software, stories] = await Promise.all([
+	getHighlights(),
+	getExperience(),
+	getProjects({ track: "hardware" }),
+	getProjects({ track: "software" }),
+	getStories(),
+])
 
-const experiences = await getCollection("work")
+const resumeFor = {
+	all: resumes[0].href,
+	hardware: resumes.find(r => r.track === "hardware")?.href ?? resumes[0].href,
+	software: resumes.find(r => r.track === "software")?.href ?? resumes[0].href,
+}
+const taglineColor = { hardware: "text-secondary-800", software: "text-primary" }
 ---
 
-<Layout title="Desarrollador Web Full-stack">
+<Layout title={site.name}>
 	<main>
-		<!-- HOME HERO -->
+		<!-- HERO -->
 		<section class="min-h-screen relative bg-blurry bg-cover pb-24" id="home-hero">
-			<div class="flex flex-col pt-[280px] justify-center items-center gap-14 max-w-5xl mx-auto text-center">
-				<h1 class="font-bold max-md:px-8 text-4xl sm:text-5xl md:text-7xl text-black-100">
-					{landingPageTitle}
-				</h1>
-				<p class="text-lg sm:text-2xl px-4 text-black-200">
-					{landingPageDescription}
+			<div class="flex flex-col pt-[190px] sm:pt-[230px] justify-center items-center gap-10 max-w-5xl mx-auto text-center px-6">
+				<p class="uppercase tracking-[.25em] text-sm font-semibold text-black-200">{hero.eyebrow}</p>
+				<h1 class="font-bold text-4xl sm:text-5xl md:text-7xl text-black-100 leading-tight">{hero.title}</h1>
+				<p class="text-xl sm:text-3xl text-black-200 max-w-3xl leading-snug font-semibold">
+					{
+						hero.tagline.map(part =>
+							"track" in part ? <span class={taglineColor[part.track]}>{part.text}</span> : part.text
+						)
+					}
 				</p>
-				<div class="flex gap-7 justify-center items-center">
-					<a
-						href="#experience"
-						class="text-lg sm:text-xl px-7 py-5 font-medium bg-primary text-white rounded transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary"
-						>Experience</a
-					>
-					<a
-						href="/projects"
-						class="text-lg sm:text-xl px-7 py-5 font-medium bg-secondary text-white rounded transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-secondary"
-						>Projects</a
-					>
+				<p class="text-lg text-black-200 max-w-2xl">{hero.description}</p>
+				<div class="flex flex-wrap gap-6 justify-center items-center">
+					{hero.actions.map(a => <ButtonLink href={a.href} style={a.style} size="lg">{a.label}</ButtonLink>)}
 				</div>
-			</div>
-			<div class="absolute bottom-4 w-full flex justify-center">
-				<a aria-hidden="true" href="/#about" class="text-black hover:text-primary animate-bounce">
-					<RightArrow className="rotate-90 w-8" />
-				</a>
+				<div class="flex flex-col items-center gap-3 mt-2">
+					<span class="text-sm text-black-200" id="focus-label">{hero.focusLabel}</span>
+					<div class="inline-flex bg-white/80 rounded-full p-1 shadow-md" role="group" aria-labelledby="focus-label">
+						<button data-focus="all" class="px-5 py-2 rounded-full text-sm font-semibold transition">Everything</button>
+						<button data-focus="hardware" class="px-5 py-2 rounded-full text-sm font-semibold transition">Hardware</button>
+						<button data-focus="software" class="px-5 py-2 rounded-full text-sm font-semibold transition">Software</button>
+					</div>
+				</div>
 			</div>
 			<span class="absolute inset-x-0 bg-primary h-5 z-10 -bottom-5"></span>
 		</section>
 
+		<HighlightsCarousel highlights={highlights} title={sections.highlights.title} intro={sections.highlights.intro} />
+		<StatCards highlights={highlights} />
+
 		<!-- ABOUT -->
-		<section class="relative min-h-[200px] pt-5" id="about">
-			<div class="mx-6 md:mx-12 xl:mx-auto flex flex-col gap-20 mt-32 max-w-7xl">
-				<h2 class="font-bold text-4xl sm:text-5xl text-center text-black-100">About Me</h2>
-				<div class="grid grid-cols-1 xl:grid-cols-2 gap-14">
-					<div class="flex flex-col gap-4 leading-9 text-lg text-black-200 text-left">
-						<p>
-							Hello, I'm David Pérez, a professional <b>Full-stack Web Developer</b> passionte for crafting innovative and
-							user-centric digital solutions. With +2 years of experience, I have honed my skills in both <b
-								>front-end</b
-							>
-							and <b>back-end</b> development, utilizing a wide range of technologies and frameworks.
-						</p>
-						<p>
-							From conceptualization to deployment, I thrive in creating responsive, scalable, and visually appealing
-							web applications. Proficient in languages such as <b>HTML, CSS, Typescript</b>, and have expertise in
-							frameworks like <b>React and NextJS</b>.
-						</p>
-						<p>
-							A strong understanding of database systems and server-side technologies allows me to build robust and
-							efficient back-end architectures. Whether it's crafting seamless user experiences or solving complex
-							technical <b>challenges</b>.
-						</p>
-						<a
-							href="/contact"
-							class="max-xl:self-center mt-4 bg-primary px-12 py-3 text-white font-medium rounded transition-colors hover:bg-primary-600 w-fit"
-							>Contact</a
-						>
-					</div>
-					<Skills />
-				</div>
+		<section class="mx-6 md:mx-12 xl:mx-auto max-w-7xl pb-28 flex flex-col gap-12" id="about">
+			<div class="max-w-4xl flex flex-col gap-5 leading-9 text-lg text-black-200">
+				<h2 class="font-bold text-4xl sm:text-5xl text-black-100 mb-4">{about.title}</h2>
+				{about.paragraphs.map(p => <p set:html={p} />)}
 			</div>
+			<SkillRows />
+		</section>
+
+		<!-- TWO DOORS -->
+		<section id="doors" class="border-t-[20px] border-t-primary bg-plane py-28">
+			<div class="text-center max-w-4xl mx-auto px-6">
+				<h2 class="font-bold text-4xl sm:text-5xl text-black-100">{sections.doors.title}</h2>
+				<p class="text-lg md:text-xl text-black-200 mt-8 leading-8">{sections.doors.intro}</p>
+			</div>
+			<div data-doors class="mt-16 max-w-7xl mx-auto px-6 sm:px-12 grid lg:grid-cols-2 gap-8">
+				<LabDoor kind="hardware" {...sections.doors.hardware} projects={hardware} />
+				<LabDoor kind="software" {...sections.doors.software} projects={software} />
+			</div>
+			<p class="text-center mt-10 text-black-200 [&_a]:text-primary [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4" set:html={sections.doors.archive} />
 		</section>
 
 		<!-- EXPERIENCE -->
-		<section class="border-t-[20px] border-t-primary mt-36" id="experience">
+		<section class="border-t-[20px] border-t-primary" id="experience">
 			<div class="bg-black py-24 border-b-[20px] border-b-primary">
-				<div class="text-center max-sm:mx-4">
-					<h3 class="text-4xl md:text-5xl font-bold text-white">Career Highlights</h3>
-					<p class="max-md:max-w-md text-lg md:text-xl text-zinc-200 mt-10 max-w-4xl mx-auto leading-8">
-						Dive into the details of my past engagements, projects, and roles to get a comprehensive understanding of my <span
-							class="text-secondary-600 font-medium">professional background</span
-						> and track record.
-					</p>
+				<div class="text-center mx-6">
+					<h2 class="text-4xl md:text-5xl font-bold text-white">{sections.experience.title}</h2>
+					<p class="text-lg md:text-xl text-zinc-200 mt-10 max-w-4xl mx-auto leading-8" set:html={sections.experience.intro} />
 				</div>
 			</div>
-			<div class="bg-plane bg-cover bg-repeat pb-36 pt-20 min-h-screen mx-12 sm:mx-16 xl:mx-auto">
-				<div class="flex flex-col mx-auto max-w-7xl">
-					{experiences.map(work => <ExperienceElement entry={work} />)}
-				</div>
-				<div class="flex flex-col items-center gap-10 text-center mt-16">
-					<h4 class="font-bold text-3xl sm:text-4xl text-black-100">Ready for more?</h4>
-					<p class="text-lg text-black-200 max-w-4xl">
-						Discover my latest projects and innovations, showcasing my passion for pushing boundaries and embracing
-						creativity.
-					</p>
-
-					<a
-						href="/projects"
-						class="bg-primary px-8 sm:px-16 py-4 font-medium text-white text-lg rounded transition hover:shadow-2xl hover:shadow-primary"
-					>
-						Let's go</a
-					>
+			<div class="bg-plane py-24">
+				<div class="max-w-7xl mx-auto px-6 sm:px-12">
+					<div class="relative">
+						<div class="absolute left-[10px] lg:left-[calc(14rem_-_2px)] top-0 bottom-0 w-1 bg-zinc-200 rounded-sm" aria-hidden="true"></div>
+						{experience.map((entry, i) => <ExperienceEntry entry={entry} last={i === experience.length - 1} />)}
+					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- EXTRAS -->
-		<section class="border-y-[20px] border-y-primary py-36" id="extras">
-			<div class="mx-12 xl:mx-auto">
-				<div class="text-center max-sm:mx-4">
-					<h3 class="text-4xl md:text-5xl font-bold text-black-100">Extras</h3>
-					<p class="max-md:max-w-md text-lg md:text-xl text-black-200 mt-10 max-w-4xl leading-8 mx-auto text-center">
-						Beyond my professional endeavors, I am a passionate adventurer who thrives on exploring new horizons in
-						other aspects of my life.
-					</p>
+		<!-- BEYOND THE CODE -->
+		<section class="border-y-[20px] border-y-primary py-28" id="beyond">
+			<div class="text-center max-w-4xl mx-auto px-6">
+				<h2 class="text-4xl md:text-5xl font-bold text-black-100">{sections.beyond.title}</h2>
+				<p class="text-lg md:text-xl text-black-200 mt-8 leading-8">{sections.beyond.intro}</p>
+			</div>
+			<div class="mt-16 max-w-7xl mx-auto px-6 sm:px-12 grid grid-cols-1 md:grid-cols-4 auto-rows-[minmax(200px,auto)] gap-5">
+				{stories.map(story => <StoryTile story={story} />)}
+			</div>
+		</section>
+
+		<!-- CONTACT -->
+		<section class="bg-blurry-2 bg-cover py-28" id="contact">
+			<div class="max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-8">
+				<h2 class="font-bold text-4xl sm:text-5xl">{sections.contact.title}</h2>
+				<p class="text-lg sm:text-xl text-black-200 leading-8 max-w-2xl">{sections.contact.text}</p>
+				<div class="flex flex-wrap gap-5 justify-center">
+					<ButtonLink href={`mailto:${site.email}`} size="lg">Email me</ButtonLink>
+					<ButtonLink
+						href={resumeFor.all}
+						style="outline"
+						size="lg"
+						target="_blank"
+						data-focus-resume
+						data-resume-all={resumeFor.all}
+						data-resume-hardware={resumeFor.hardware}
+						data-resume-software={resumeFor.software}>Download résumé</ButtonLink
+					>
 				</div>
-				<div class="mt-16 grid grid-cols-1 xl:grid-cols-3 gap-10 justify-center max-w-lg xl:max-w-6xl mx-auto">
-					{hobbies.map(h => <HobbieCard title={h.title} description={h.description} link={h.link} />)}
-				</div>
+				<ul class="flex gap-5 mt-2">
+					{
+						socials.map(s => (
+							<li>
+								<a
+									href={s.link}
+									target="_blank"
+									rel="noopener"
+									aria-label={s.name}
+									class="w-12 h-12 bg-black-100 rounded-full shadow flex items-center justify-center transition hover:-translate-y-1 hover:bg-primary"
+								>
+									<img class="w-6 h-6" src={s.icon} alt="" />
+								</a>
+							</li>
+						))
+					}
+				</ul>
+				<p class="text-sm text-black-200 mt-6 max-w-xl">{sections.contact.visaNote}</p>
 			</div>
 		</section>
 	</main>
 </Layout>
+
+<script>
+	import "../scripts/focus"
+</script>

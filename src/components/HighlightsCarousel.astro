@@ -1,0 +1,174 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import { themeButton, themeOf, themes } from "../lib/theme"
+import ButtonLink from "./ButtonLink.astro"
+import Media from "./Media.astro"
+
+interface Props {
+	highlights: CollectionEntry<"highlights">[]
+	title: string
+	intro: string
+}
+
+const { highlights, title, intro } = Astro.props
+const slides = await Promise.all(highlights.map(async h => ({ entry: h, Content: (await render(h)).Content })))
+---
+
+<section class="pt-24 pb-16 overflow-hidden" id="highlights" data-carousel>
+	<div class="max-w-7xl mx-auto px-6 sm:px-12 flex flex-wrap items-end justify-between gap-6 mb-10">
+		<div>
+			<h2 class="font-bold text-4xl sm:text-5xl text-black-100">{title}</h2>
+			<p class="text-lg text-black-200 mt-4">{intro}</p>
+		</div>
+		<div class="flex gap-3">
+			<button
+				data-prev
+				aria-label="Previous highlight"
+				class="w-12 h-12 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition flex items-center justify-center"
+			>
+				<svg class="w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+			</button>
+			<button
+				data-next
+				aria-label="Next highlight"
+				class="w-12 h-12 rounded-full bg-primary text-white hover:bg-primary-600 transition flex items-center justify-center"
+			>
+				<svg class="w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+			</button>
+		</div>
+	</div>
+
+	<div class="max-w-7xl mx-auto px-6 sm:px-12">
+		<div data-bars class="flex gap-2 mb-6" role="tablist" aria-label="Highlights"></div>
+		<div style="clip-path: inset(-60px -100vw -60px 0)">
+			<div data-track-el class="flex gap-6 transition-transform duration-700 ease-out" aria-live="polite">
+				{
+					slides.map(({ entry, Content }, i) => {
+						const d = entry.data
+						const t = themeOf(d.track, d.theme)
+						const overlay = d.layout === "overlay"
+						return (
+							<article
+								data-slide
+								data-track={d.track}
+								data-tag={d.tag}
+								aria-roledescription="slide"
+								aria-label={d.title}
+								class:list={[
+									"shrink-0 w-[92%] md:w-[82%] rounded-xl overflow-hidden bg-white shadow-xl",
+									themes[t].shadow,
+									overlay ? "relative min-h-[460px] md:min-h-[480px] flex items-end" : "grid md:grid-cols-5",
+								]}
+							>
+								<div
+									class:list={[
+										overlay ? "absolute inset-0" : "md:col-span-3 min-h-[260px] md:min-h-[420px]",
+										d.layout === "split-reverse" && "md:order-last",
+									]}
+								>
+									<Media media={d.visual} eager={i === 0} />
+								</div>
+								{overlay && <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent md:bg-linear-to-r md:from-black/85 md:via-black/40" />}
+								<div
+									class:list={[
+										"p-8 md:p-10 flex flex-col gap-5 justify-center",
+										overlay ? "relative text-white md:max-w-[50%]" : "md:col-span-2",
+									]}
+								>
+									<div class="flex gap-2 flex-wrap">
+										<span class:list={["text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-sm", themes[t].pill]}>{d.tag}</span>
+										{d.pills.map(p => (
+											<span class:list={["text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-sm", overlay ? "bg-white/15 text-white" : "bg-zinc-100 text-black-200"]}>{p}</span>
+										))}
+									</div>
+									<h3 class="font-bold text-3xl leading-tight">{d.title}</h3>
+									<div class:list={["leading-7 [&_p]:mb-3 [&_a]:underline", overlay ? "text-zinc-200" : "text-black-200"]}>
+										<Content />
+									</div>
+									{d.cta && (
+										<ButtonLink href={d.cta.href} style={d.cta.style ?? themeButton[t]}>
+											{d.cta.label}
+										</ButtonLink>
+									)}
+								</div>
+							</article>
+						)
+					})
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { onFocusChange, rank } from "../scripts/focus"
+
+	const DURATION = 7000
+	const root = document.querySelector<HTMLElement>("[data-carousel]")!
+	const track = root.querySelector<HTMLElement>("[data-track-el]")!
+	const bars = root.querySelector<HTMLElement>("[data-bars]")!
+	const original = [...track.querySelectorAll<HTMLElement>("[data-slide]")]
+	const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches
+
+	let slides = original
+	let index = 0
+	let elapsed = 0
+	let paused = reducedMotion
+	let last = performance.now()
+
+	function renderBars() {
+		bars.innerHTML = slides
+			.map(
+				(s, i) => `
+			<button role="tab" aria-selected="${i === index}" aria-label="Go to ${s.getAttribute("aria-label")}" class="flex-1 text-left">
+				<span class="hidden sm:block text-[11px] font-bold uppercase tracking-widest mb-2 ${i === index ? "text-black-100" : "text-zinc-400"}">${s.dataset.tag}</span>
+				<span class="block h-1.5 rounded-full bg-zinc-200 overflow-hidden"><span data-bar class="block h-full bg-primary" style="width:0"></span></span>
+			</button>`
+			)
+			.join("")
+		bars.querySelectorAll("button").forEach((b, i) => b.addEventListener("click", () => go(i)))
+	}
+
+	function go(i: number) {
+		index = (i + slides.length) % slides.length
+		elapsed = 0
+		// Distance from the track's start (both rects move together, so the current transform cancels out)
+		const offset = slides[index].getBoundingClientRect().left - track.getBoundingClientRect().left
+		track.style.transform = `translateX(${-offset}px)`
+		slides.forEach((s, j) => s.setAttribute("aria-hidden", String(j !== index)))
+		renderBars()
+	}
+
+	function tick(now: number) {
+		if (!paused) elapsed += now - last
+		last = now
+		bars.querySelectorAll<HTMLElement>("[data-bar]").forEach((b, i) => {
+			b.style.width = i < index ? "100%" : i === index ? `${Math.min(elapsed / DURATION, 1) * 100}%` : "0"
+		})
+		if (elapsed >= DURATION) go(index + 1)
+		requestAnimationFrame(tick)
+	}
+
+	track.addEventListener("mouseenter", () => (paused = true))
+	track.addEventListener("mouseleave", () => (paused = reducedMotion))
+	track.addEventListener("focusin", () => (paused = true))
+	root.querySelector("[data-prev]")!.addEventListener("click", () => go(index - 1))
+	root.querySelector("[data-next]")!.addEventListener("click", () => go(index + 1))
+	addEventListener("resize", () => go(index))
+
+	// Swipe on touch screens
+	let startX = 0
+	track.addEventListener("touchstart", e => (startX = e.touches[0].clientX), { passive: true })
+	track.addEventListener("touchend", e => {
+		const dx = e.changedTouches[0].clientX - startX
+		if (Math.abs(dx) > 50) go(index + (dx < 0 ? 1 : -1))
+	})
+
+	onFocusChange(focus => {
+		const r = rank[focus]
+		slides = [...original].sort((a, b) => r[a.dataset.track!] - r[b.dataset.track!])
+		slides.forEach(s => track.appendChild(s))
+		go(0)
+	})
+	requestAnimationFrame(tick)
+</script>

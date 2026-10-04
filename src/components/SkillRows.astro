@@ -1,0 +1,47 @@
+---
+import { skillGroups } from "../data/personal"
+
+// Repeat short rows so the looping marquee never shows an empty gap
+const loop = <T,>(items: readonly T[]) => {
+	const base = Array.from({ length: Math.ceil(14 / items.length) }, () => items).flat()
+	return { items: [...base, ...base] }
+}
+
+const columns = [
+	{ title: "Hardware lab", groups: skillGroups.filter(g => g.track === "hardware"), soft: "bg-secondary-100", heading: "text-secondary-900" },
+	{ title: "Software studio", groups: skillGroups.filter(g => g.track === "software"), soft: "bg-primary-50", heading: "text-primary-600" },
+]
+---
+
+<div class="grid xl:grid-cols-2 gap-6">
+	{
+		columns.map(col => (
+			<div class:list={["rounded-md overflow-hidden py-5", col.soft]}>
+				<h3 class:list={["font-semibold text-lg px-6", col.heading]}>{col.title}</h3>
+				<div class="flex flex-col gap-4 mt-4">
+					{col.groups.map((group, i) => (
+						<div>
+							<h4 class="px-6 text-xs font-bold uppercase tracking-widest text-black-200 mb-2">{group.name}</h4>
+							<div class="overflow-hidden py-2">
+								<ul
+									class="marquee animate-marquee flex gap-3 w-max"
+									style={`animation-direction: ${i % 2 ? "reverse" : "normal"}; animation-duration: ${loop(group.items).items.length * 2.5}s`}
+								>
+									{loop(group.items).items.map((item, j) => (
+										<li
+											aria-hidden={j >= group.items.length ? "true" : undefined}
+											class="bg-white rounded-full shadow-sm px-4 py-2 font-medium flex items-center gap-2 text-sm whitespace-nowrap"
+										>
+											{item.icon && <img class="w-5 h-5" src={`/images/techs/${item.icon}`} alt="" />}
+											{item.name}
+										</li>
+									))}
+								</ul>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		))
+	}
+</div>

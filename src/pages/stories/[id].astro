@@ -1,0 +1,152 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content"
+import ButtonLink from "../../components/ButtonLink.astro"
+import Media from "../../components/Media.astro"
+import Layout from "../../layouts/Layout.astro"
+import { themes } from "../../lib/theme"
+
+export async function getStaticPaths() {
+	const stories = await getCollection("stories", s => !s.data.draft && s.data.page && !s.data.externalUrl)
+	return stories.map(entry => ({ params: { id: entry.id }, props: { entry } }))
+}
+
+interface Props {
+	entry: CollectionEntry<"stories">
+}
+
+const { entry } = Astro.props
+const d = entry.data
+const { Content } = await render(entry)
+const statThemes = [themes.crimson, themes.mint]
+
+const polaroidSpots: Record<number, string[]> = {
+	1: ["left-[10%] top-0 w-[80%] -rotate-2"],
+	2: ["left-0 top-0 w-[60%] -rotate-3", "right-0 top-40 w-[56%] rotate-3 z-10"],
+	3: ["left-0 top-0 w-[58%] -rotate-3", "right-0 top-20 w-[52%] rotate-3 z-10", "right-6 bottom-0 w-[54%] -rotate-2 z-20"],
+}
+---
+
+<Layout title={d.title} description={d.summary} image={d.hero?.type === "image" ? d.hero.src : undefined}>
+	<main class="border-b-[20px] border-b-primary">
+		{
+			d.hero ? (
+				<section class="relative bg-black text-white grid lg:grid-cols-2 min-h-screen">
+					<div class="relative flex items-end overflow-hidden">
+						<div class="absolute inset-0 bg-print bg-cover opacity-30" />
+						<div class="relative px-6 sm:px-12 xl:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] pb-20 pt-40">
+							<span class="text-sm font-bold uppercase tracking-[.25em] text-secondary-600">{d.eyebrow}</span>
+							<h1 class="font-bold text-5xl sm:text-7xl mt-4 leading-tight">{d.title}</h1>
+							<p class="text-xl text-zinc-300 mt-6 max-w-xl leading-9">{d.summary}</p>
+							{d.gallery.length > 0 && (
+								<ButtonLink href="#album" class="mt-10">
+									See the album
+								</ButtonLink>
+							)}
+						</div>
+					</div>
+					<div class="relative min-h-[60vh]">
+						<Media media={d.hero} eager />
+					</div>
+					<span class="absolute inset-x-0 bg-primary h-5 z-10 -bottom-5" />
+				</section>
+			) : (
+				<section class="relative bg-blurry bg-cover pt-44 pb-24">
+					<div class="max-w-7xl mx-auto px-6 sm:px-12">
+						<span class="text-sm font-bold uppercase tracking-[.25em] text-primary-600">{d.eyebrow}</span>
+						<h1 class="font-bold text-5xl sm:text-7xl mt-4 leading-tight max-w-4xl">{d.title}</h1>
+						<p class="text-xl text-black-200 mt-6 max-w-2xl leading-9">{d.summary}</p>
+					</div>
+					<span class="absolute inset-x-0 bg-primary h-5 z-10 -bottom-5" />
+				</section>
+			)
+		}
+
+		{
+			(d.facts.length > 0 || d.stats.length > 0) && (
+				<section class="max-w-7xl mx-auto px-6 sm:px-12 pt-24 grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-6 items-stretch">
+					{d.facts.length > 0 && (
+						<dl class="bg-white rounded-xl shadow-xl shadow-zinc-200 p-7 grid grid-cols-[auto_1fr] gap-x-6 gap-y-4 text-sm content-center border-t-8 border-primary">
+							{d.facts.map(f => (
+								<Fragment>
+									<dt class="font-bold uppercase tracking-wider text-xs text-black-200 pt-0.5">{f.label}</dt>
+									<dd class="font-semibold">{f.value}</dd>
+								</Fragment>
+							))}
+						</dl>
+					)}
+					{d.stats.length > 0 && (
+						<ul class="grid grid-cols-2 gap-4">
+							{d.stats.map((s, i) => (
+								<li class:list={["rounded-md p-6 flex flex-col justify-center", statThemes[i % 2].soft]}>
+									<div class:list={["text-4xl font-bold", statThemes[i % 2].value]}>
+										{s.value}
+										{s.suffix && <span class="text-xl opacity-60">{s.suffix}</span>}
+									</div>
+									<div class:list={["text-sm font-medium mt-2", statThemes[i % 2].label]}>{s.label}</div>
+								</li>
+							))}
+						</ul>
+					)}
+				</section>
+			)
+		}
+
+		{
+			entry.body?.trim() && (
+				<section class:list={["max-w-7xl mx-auto px-6 sm:px-12 py-24 grid gap-16 items-start", d.photos.length > 0 && "lg:grid-cols-2"]}>
+					<div class="md-content md-chapters max-w-3xl">
+						<Content />
+					</div>
+					{d.photos.length > 0 && (
+						<div class="h-[640px] hidden lg:block sticky top-28">
+							{d.photos.map((p, i) => (
+								<figure class:list={["polaroid absolute", polaroidSpots[d.photos.length][i]]}>
+									<Media media={p.media} class="aspect-[4/3]" />
+									<figcaption class="text-center text-sm mt-2 font-medium text-black-200">{p.caption}</figcaption>
+								</figure>
+							))}
+						</div>
+					)}
+				</section>
+			)
+		}
+
+		{
+			d.quote && (
+				<blockquote class="bg-black py-24 px-6">
+					<p class="max-w-4xl mx-auto text-center text-2xl sm:text-4xl font-bold text-white leading-snug">“{d.quote}”</p>
+				</blockquote>
+			)
+		}
+
+		{
+			d.gallery.length > 0 && (
+				<section class="max-w-7xl mx-auto px-6 sm:px-12 py-24">
+					<h2 id="album" class="text-3xl font-bold mb-8 scroll-mt-28">
+						Album
+					</h2>
+					<div class="columns-1 sm:columns-2 lg:columns-3 gap-4">
+						{d.gallery.map(g => (
+							<figure class="break-inside-avoid mb-4">
+								<img src={g.src} alt={g.alt} loading="lazy" class="rounded-md w-full" />
+								{g.caption && <figcaption class="text-sm text-black-200 mt-2">{g.caption}</figcaption>}
+							</figure>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			d.links.length > 0 && (
+				<section class="max-w-7xl mx-auto px-6 sm:px-12 pb-24 flex flex-wrap gap-4">
+					{d.links.map(l => (
+						<ButtonLink href={l.href} style={l.style ?? "primary"}>
+							{l.label}
+						</ButtonLink>
+					))}
+				</section>
+			)
+		}
+	</main>
+</Layout>

@@ -1,0 +1,28 @@
+---
+import type { Link } from "../lib/schemas"
+import { buttonStyles } from "../lib/theme"
+
+interface Props {
+	href: string
+	style?: NonNullable<Link["style"]>
+	size?: "md" | "lg"
+	class?: string
+	[key: string]: unknown
+}
+
+const { href, style = "primary", size = "md", class: className, ...rest } = Astro.props
+const external = /^https?:\/\//.test(href)
+---
+
+<a
+	href={href}
+	target={external ? "_blank" : undefined}
+	rel={external ? "noopener" : undefined}
+	class:list={[
+		"inline-block w-fit font-medium rounded-sm text-center transition hover:-translate-y-1 hover:shadow-xl",
+		size === "lg" ? "text-lg sm:text-xl px-7 py-5 hover:-translate-y-2 hover:shadow-2xl" : "px-6 py-3",
+		buttonStyles[style],
+		className,
+	]}
+	{...rest}><slot /></a
+>

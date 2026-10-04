@@ -1,0 +1,178 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content"
+import ButtonLink from "../../components/ButtonLink.astro"
+import FlowDiagram from "../../components/FlowDiagram.astro"
+import Gallery from "../../components/Gallery.astro"
+import Media from "../../components/Media.astro"
+import Layout from "../../layouts/Layout.astro"
+import { getProjects } from "../../lib/content"
+import { projectTheme, themeOf, themes } from "../../lib/theme"
+
+export async function getStaticPaths() {
+	const projects = await getCollection("projects", p => !p.data.draft)
+	return projects.map(entry => ({ params: { id: entry.id }, props: { entry } }))
+}
+
+interface Props {
+	entry: CollectionEntry<"projects">
+}
+
+const { entry } = Astro.props
+const d = entry.data
+const theme = projectTheme(d.track)
+const t = themes[theme]
+const { Content } = await render(entry)
+
+const lab = d.archive
+	? { name: "Early work", href: "/projects/archive" }
+	: d.track === "software"
+		? { name: "Software studio", href: "/software" }
+		: { name: "Hardware lab", href: "/hardware" }
+
+const trackPills = {
+	hardware: [{ label: "Hardware", cls: themes.mint.pill }],
+	software: [{ label: "Software", cls: themes.crimson.pill }],
+	both: [
+		{ label: "Hardware", cls: themes.mint.pill },
+		{ label: "Software", cls: themes.crimson.pill },
+	],
+	life: [],
+}[d.track]
+
+// Next project in the same lab
+const siblings = await getProjects({ archive: d.archive, track: d.track === "software" ? "software" : d.archive ? undefined : "hardware" })
+const next = siblings.length > 1 ? siblings[(siblings.findIndex(p => p.id === entry.id) + 1) % siblings.length] : undefined
+
+const galleryItems = d.gallery.length > 0 ? d.gallery : [{ category: "Overview", media: d.cover, caption: undefined }]
+const architecture = d.architecture
+---
+
+<Layout title={d.title} description={d.summary}>
+	<main class="pb-24 border-b-[20px] border-b-primary">
+		<section class="bg-blurry-2 bg-cover pt-36 pb-16">
+			<div class="max-w-7xl mx-auto px-6 sm:px-12">
+				<nav aria-label="Breadcrumb" class="text-sm font-medium text-black-200 flex flex-wrap gap-2">
+					<a href="/" class="hover:text-primary">Home</a><span>/</span>
+					<a href={lab.href} class:list={["hover:underline", t.label]}>{lab.name}</a><span>/</span>
+					<span class="text-black-100">{d.title}</span>
+				</nav>
+				<div class="flex flex-wrap gap-2 mt-8">
+					{trackPills.map(p => <span class:list={["text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-sm", p.cls]}>{p.label}</span>)}
+					{d.tags.map(tag => <span class="text-xs font-bold uppercase tracking-widest bg-zinc-100 text-black-200 px-3 py-1 rounded-sm">{tag}</span>)}
+				</div>
+				<h1 class="font-bold text-4xl sm:text-6xl mt-6 max-w-4xl leading-tight">{d.title}</h1>
+				<p class="text-xl text-black-200 mt-6 max-w-3xl leading-9">{d.summary}</p>
+
+				{
+					d.tldr && (
+						<div class="grid md:grid-cols-3 gap-4 mt-12">
+							<div class="bg-white rounded-md p-6 border-t-4 border-primary shadow">
+								<p class="text-xs font-bold uppercase tracking-widest text-primary-600">Problem</p>
+								<p class="mt-3 text-black-200 leading-7">{d.tldr.problem}</p>
+							</div>
+							<div class="bg-white rounded-md p-6 border-t-4 border-secondary shadow">
+								<p class="text-xs font-bold uppercase tracking-widest text-secondary-800">What I built</p>
+								<p class="mt-3 text-black-200 leading-7">{d.tldr.built}</p>
+							</div>
+							<div class="bg-white rounded-md p-6 border-t-4 border-black-100 shadow">
+								<p class="text-xs font-bold uppercase tracking-widest text-black-100">Result</p>
+								<p class="mt-3 text-black-200 leading-7">{d.tldr.result}</p>
+							</div>
+						</div>
+					)
+				}
+			</div>
+		</section>
+
+		<section class="max-w-7xl mx-auto px-6 sm:px-12 mt-16 grid lg:grid-cols-[minmax(0,1fr)_20rem] gap-10 items-start">
+			<Gallery items={galleryItems} theme={theme} />
+
+			<aside class:list={["bg-white rounded-xl shadow-xl p-7 lg:sticky lg:top-28", t.shadow]}>
+				<p class:list={["text-xs font-bold uppercase tracking-widest mb-5", t.label]}>Spec sheet</p>
+				<dl class="grid grid-cols-[auto_1fr] gap-x-5 gap-y-4 text-sm">
+					{
+						d.period && (
+							<Fragment>
+								<dt class="text-black-200">When</dt>
+								<dd class="font-semibold">{d.period}</dd>
+							</Fragment>
+						)
+					}
+					{
+						d.specs.map(s => (
+							<Fragment>
+								<dt class="text-black-200">{s.label}</dt>
+								<dd class="font-semibold">{s.value}</dd>
+							</Fragment>
+						))
+					}
+				</dl>
+				{
+					d.stack.length > 0 && (
+						<div class="border-t border-zinc-100 mt-6 pt-6">
+							<p class="text-xs font-bold uppercase tracking-widest text-black-200 mb-3">Stack</p>
+							<ul class="flex flex-wrap gap-2 text-xs font-semibold">
+								{d.stack.map(tech => (
+									<li class:list={["px-2 py-1 rounded-sm flex items-center gap-1.5", themes[tech.track ? themeOf(tech.track) : theme].pill]}>
+										{tech.icon && <img class="w-4 h-4" src={`/images/techs/${tech.icon}`} alt="" />}
+										{tech.name}
+									</li>
+								))}
+							</ul>
+						</div>
+					)
+				}
+				{
+					d.links.length > 0 && (
+						<div class="flex flex-col gap-3 mt-7">
+							{d.links.map((l, i) => (
+								<ButtonLink href={l.href} style={l.style ?? (i === 0 ? "dark" : "outline")} class="w-full!">
+									{l.label}
+								</ButtonLink>
+							))}
+						</div>
+					)
+				}
+			</aside>
+		</section>
+
+		{
+			architecture && (
+				<section class="max-w-7xl mx-auto px-6 sm:px-12 mt-24">
+					<h2 class="text-3xl font-bold">{(architecture.type === "flow" && architecture.title) || "How it works"}</h2>
+					<div class="mt-8 bg-white rounded-xl shadow p-6 sm:p-10">
+						{architecture.type === "flow" ? (
+							<FlowDiagram diagram={architecture} />
+						) : (
+							<Media media={architecture} class="aspect-video rounded-md" />
+						)}
+					</div>
+					{architecture.caption && <p class="text-sm text-black-200 mt-3">{architecture.caption}</p>}
+				</section>
+			)
+		}
+
+		{
+			entry.body?.trim() && (
+				<section class="max-w-3xl mx-auto px-6 mt-24 md-content md-article">
+					<Content />
+				</section>
+			)
+		}
+
+		<nav class="max-w-7xl mx-auto px-6 sm:px-12 mt-24 grid sm:grid-cols-2 gap-6">
+			<a href={lab.href} class="rounded-xl bg-zinc-100 p-6 hover:bg-zinc-200 transition">
+				<span class="text-sm text-black-200">← Back to</span>
+				<p class="font-bold text-xl mt-1">{lab.name}</p>
+			</a>
+			{
+				next && (
+					<a href={`/projects/${next.id}`} class:list={["rounded-xl p-6 text-right transition hover:brightness-95", t.soft]}>
+						<span class:list={["text-sm", t.label]}>Next project →</span>
+						<p class="font-bold text-xl mt-1">{next.data.title}</p>
+					</a>
+				)
+			}
+		</nav>
+	</main>
+</Layout>

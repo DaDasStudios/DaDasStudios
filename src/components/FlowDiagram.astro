@@ -1,0 +1,58 @@
+---
+import type { FlowDiagram, Track } from "../lib/schemas"
+
+interface Props {
+	diagram: FlowDiagram
+}
+
+const { diagram } = Astro.props
+
+const box: Record<Track | "none", { box: string; detail: string }> = {
+	hardware: { box: "bg-secondary-100 text-secondary-950", detail: "text-secondary-800" },
+	software: { box: "bg-primary-50 text-primary-800", detail: "text-primary-600" },
+	both: { box: "bg-zinc-100 text-black-100", detail: "text-black-200" },
+	life: { box: "bg-zinc-100 text-black-100", detail: "text-black-200" },
+	none: { box: "bg-zinc-100 text-black-100", detail: "text-black-200" },
+}
+---
+
+<div class="flex flex-col md:flex-row md:items-start gap-3" role="list" aria-label={diagram.title ?? "How it works"}>
+	{
+		diagram.steps.map((step, i) => (
+			<Fragment>
+				{i > 0 && (
+					<div aria-hidden="true" class="self-center md:self-start md:mt-6 text-secondary-800 text-2xl rotate-90 md:rotate-0 leading-none">
+						→
+					</div>
+				)}
+				<div role="listitem" class="flex-1 min-w-0 flex flex-col items-stretch">
+					<div
+						class:list={[
+							"rounded-md p-4 min-h-[4.5rem] flex flex-col justify-center text-center text-sm font-semibold",
+							box[step.track ?? "none"].box,
+						]}
+					>
+						{step.label}
+						{step.detail && <span class:list={["block text-xs font-medium mt-1", box[step.track ?? "none"].detail]}>{step.detail}</span>}
+					</div>
+					{step.branches.map(branch => (
+						<Fragment>
+							<div aria-hidden="true" class="self-center h-5 border-l-2 border-dashed border-zinc-300" />
+							<div
+								class:list={[
+									"rounded-md p-3 text-center text-sm font-semibold border-2 border-dashed border-current/25 mx-8 md:mx-0",
+									box[branch.track ?? "none"].box,
+								]}
+							>
+								{branch.label}
+								{branch.detail && (
+									<span class:list={["block text-xs font-medium mt-1", box[branch.track ?? "none"].detail]}>{branch.detail}</span>
+								)}
+							</div>
+						</Fragment>
+					))}
+				</div>
+			</Fragment>
+		))
+	}
+</div>

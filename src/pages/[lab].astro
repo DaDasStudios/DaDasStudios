@@ -1,0 +1,36 @@
+---
+import ProjectCard from "../components/ProjectCard.astro"
+import { labs } from "../data/personal"
+import Layout from "../layouts/Layout.astro"
+import { getProjects } from "../lib/content"
+
+export function getStaticPaths() {
+	return [{ params: { lab: "hardware" } }, { params: { lab: "software" } }]
+}
+
+const lab = Astro.params.lab as "hardware" | "software"
+const copy = labs[lab]
+const projects = await getProjects({ track: lab })
+const hw = lab === "hardware"
+---
+
+<Layout title={copy.title} description={copy.intro}>
+	<main class="min-h-screen bg-plane border-b-[20px] border-b-primary pb-28">
+		<section class="bg-blurry bg-cover pt-40 pb-20">
+			<div class="max-w-7xl mx-auto px-6 sm:px-12">
+				<span class:list={["text-sm font-bold uppercase tracking-[.25em]", hw ? "text-secondary-800" : "text-primary-600"]}>{copy.eyebrow}</span>
+				<h1 class="font-bold text-5xl sm:text-7xl mt-4">{copy.title}</h1>
+				<p class="text-xl text-black-200 mt-6 max-w-3xl leading-9">{copy.intro}</p>
+			</div>
+		</section>
+		<section class="max-w-7xl mx-auto px-6 sm:px-12 mt-8 grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+			{projects.map(p => <ProjectCard project={p} />)}
+		</section>
+		<p class="text-center mt-16 text-black-200">
+			Looking for the other side? <a href={hw ? "/software" : "/hardware"} class="text-primary font-medium underline underline-offset-4"
+				>{hw ? labs.software.title : labs.hardware.title}</a
+			>
+			{!hw && <Fragment> · <a href="/projects/archive" class="text-primary font-medium underline underline-offset-4">{labs.archive.title}</a></Fragment>}
+		</p>
+	</main>
+</Layout>

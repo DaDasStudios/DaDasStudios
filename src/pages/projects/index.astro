@@ -1,44 +1,24 @@
 ---
-import RightArrow from "../../components/RightArrow.astro"
+import LabDoor from "../../components/LabDoor.astro"
+import { labs, sections } from "../../data/personal"
 import Layout from "../../layouts/Layout.astro"
-import { getCollection } from "astro:content"
+import { getProjects } from "../../lib/content"
 
-const projectCollection = await getCollection("project")
+const [hardware, software] = await Promise.all([getProjects({ track: "hardware" }), getProjects({ track: "software" })])
 ---
 
 <Layout title="Projects">
-  <main class="min-h-screen bg-cover bg-fixed bg-print border-b-[20px] border-b-primary py-36 text-left">
-    <section
-      class="mx-8 sm:mx-16 xl:mx-auto max-w-7xl mt-16 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start justify-start gap-8"
-    >
-      {
-        projectCollection.map(entry => (
-          <article class="w-full h-full min-h-fit flex flex-col rounded-md overflow-hidden group/color bg-white shadow odd/:shadow-primary-50 even:shadow-secondary-100">
-            <div class="relative group/card h-[65%] select-none">
-              <img
-                loading="lazy"
-                draggable="false"
-                class="h-full object-cover"
-                src={`/images/projects/${entry.data.image}`}
-                alt={entry.data.title}
-              />
-              <p class="absolute inset-0 pointer-events-none opacity-0 transition duration-300 group-hover/card:opacity-100 group-hover/card:pointer-events-auto bg-black/60 text-white text-center font-medium text-xl p-3 flex items-center justify-center">
-                {entry.data.description}
-              </p>
-            </div>
-            <div class="h-[35%] flex flex-wrap items-center gap-4 justify-between p-6 group-odd/color:bg-primary-50 group-even/color:bg-secondary-100 text-black-100 font-medium text-lg">
-              <h4 title={entry.data.title} class="flex-1 text-xl sm:text-2xl truncate">{entry.data.title}</h4>
-              <a
-                class="group-odd/color:bg-primary hover:group-odd/color:bg-primary-600 group-even/color:bg-secondary hover:group-even/color:bg-secondary-700 transition-colors rounded px-4 py-3 text-white text-center flex justify-between items-center gap-4"
-                href={`/projects/${entry.slug}`}
-              >
-                <span class="hidden xs:block">View More</span>
-                <RightArrow className="w-6" />
-              </a>
-            </div>
-          </article>
-        ))
-      }
-    </section>
-  </main>
+	<main class="min-h-screen bg-plane border-b-[20px] border-b-primary pt-40 pb-28">
+		<div class="text-center max-w-4xl mx-auto px-6">
+			<h1 class="font-bold text-5xl sm:text-6xl">{sections.doors.title}</h1>
+			<p class="text-lg md:text-xl text-black-200 mt-8 leading-8">{sections.doors.intro}</p>
+		</div>
+		<div class="mt-16 max-w-7xl mx-auto px-6 sm:px-12 grid lg:grid-cols-2 gap-8">
+			<LabDoor kind="hardware" {...sections.doors.hardware} projects={hardware} />
+			<LabDoor kind="software" {...sections.doors.software} projects={software} />
+		</div>
+		<p class="text-center mt-10 text-black-200">
+			<a href="/projects/archive" class="text-primary font-medium underline underline-offset-4">{labs.archive.title}</a>
+		</p>
+	</main>
 </Layout>

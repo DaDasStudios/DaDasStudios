@@ -1,0 +1,133 @@
+---
+import type { Media } from "../lib/schemas"
+import { themes } from "../lib/theme"
+
+interface Props {
+	media: Media
+	/** Classes for the outer frame (sizing, rounding) */
+	class?: string
+	/** Load immediately (first slide, heroes) */
+	eager?: boolean
+	/** Smaller text for thumbnails and tiles */
+	compact?: boolean
+}
+
+const { media, class: className = "", eager = false, compact = false } = Astro.props
+const loading = eager ? "eager" : "lazy"
+---
+
+{
+	media.type === "image" && (
+		<div
+			class:list={[
+				"relative w-full h-full overflow-hidden",
+				media.backdrop && themes[media.backdrop].panel,
+				(media.tilt || media.fit === "contain") && "flex items-center justify-center",
+				media.tilt && "p-8",
+				className,
+			]}
+		>
+			{media.backdrop && media.tilt && <div class="absolute inset-0 bg-plane opacity-20" />}
+			<img
+				src={media.src}
+				alt={media.alt}
+				loading={loading}
+				draggable="false"
+				style={media.position ? `object-position: ${media.position}` : undefined}
+				class:list={[
+					media.tilt
+						? "relative max-h-full object-contain"
+						: media.fit === "contain"
+							? "relative w-full h-auto max-h-full object-contain"
+							: "absolute inset-0 w-full h-full object-cover",
+					media.tilt && "media-tilt w-4/5 drop-shadow-2xl",
+				]}
+			/>
+		</div>
+	)
+}
+
+{
+	media.type === "embed" && (
+		<div class:list={["relative w-full h-full bg-white", className]}>
+			<iframe src={media.src} title={media.title} loading={loading} class="absolute inset-0 w-full h-full border-0" />
+		</div>
+	)
+}
+
+{
+	media.type === "html" && (
+		<div
+			class:list={[
+				"relative w-full h-full overflow-hidden flex items-center justify-center",
+				media.backdrop && themes[media.backdrop].panel,
+				className,
+			]}
+			set:html={media.html}
+		/>
+	)
+}
+
+{
+	media.type === "stat" && (
+		<div
+			class:list={[
+				"relative w-full h-full overflow-hidden flex flex-col items-center justify-center text-center p-8",
+				themes[media.backdrop].panel,
+				className,
+			]}
+		>
+			<div class="absolute inset-0 bg-plane opacity-30" />
+			<span class:list={["relative font-bold leading-none", compact ? "text-6xl" : "text-8xl sm:text-[9rem]"]}>
+				{media.value}
+			</span>
+			<span class:list={["relative font-medium mt-3", compact ? "text-base" : "text-xl"]}>{media.label}</span>
+			{media.badge && <span class="relative mt-6 bg-white/15 rounded-sm px-4 py-2 font-semibold">{media.badge}</span>}
+			{media.chips.length > 0 && (
+				<div class="relative flex flex-wrap justify-center gap-2 mt-6 text-sm font-medium">
+					{media.chips.map(chip => (
+						<span class="border border-current/30 rounded-sm px-3 py-1">{chip}</span>
+					))}
+				</div>
+			)}
+		</div>
+	)
+}
+
+{
+	media.type === "statement" && (
+		<div
+			class:list={[
+				"relative w-full h-full overflow-hidden flex flex-col items-center justify-center text-center p-8 sm:p-12",
+				themes[media.backdrop].panel,
+				className,
+			]}
+		>
+			<div class="absolute inset-0 bg-print bg-cover opacity-30" />
+			<p class:list={["relative font-bold leading-tight max-w-xl", compact ? "text-2xl" : "text-3xl sm:text-5xl"]}>
+				{media.text}
+			</p>
+			{media.chips.length > 0 && (
+				<div class="relative flex flex-wrap justify-center gap-2 mt-8 text-sm font-medium">
+					{media.chips.map(chip => (
+						<span class="border border-current/30 rounded-sm px-3 py-1">{chip}</span>
+					))}
+				</div>
+			)}
+		</div>
+	)
+}
+
+{
+	media.type === "placeholder" && (
+		<div
+			class:list={[
+				"placeholder-box w-full h-full bg-secondary-100 border-secondary-600 text-secondary-800",
+				compact && "text-xs",
+				className,
+			]}
+		>
+			<span class="bg-white/85 px-3 py-1.5 rounded-md">{media.label}</span>
+		</div>
+	)
+}

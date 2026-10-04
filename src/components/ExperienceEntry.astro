@@ -1,0 +1,180 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import { formatPeriod } from "../lib/content"
+import { themeButton, themeOf, themes } from "../lib/theme"
+import ButtonLink from "./ButtonLink.astro"
+import Media from "./Media.astro"
+
+interface Props {
+	entry: CollectionEntry<"experience">
+	last?: boolean
+}
+
+const { entry, last = false } = Astro.props
+const d = entry.data
+const theme = themeOf(d.track, d.theme)
+const t = themes[theme]
+const { Content } = await render(entry)
+const hasBody = Boolean(entry.body?.trim())
+const photos = d.frame.layout === "polaroids" ? d.frame.photos : []
+
+const polaroidSpots: Record<number, string[]> = {
+	1: ["left-[15%] top-2 w-[70%] -rotate-2"],
+	2: ["left-0 top-4 w-[58%] -rotate-6", "right-0 top-16 w-[54%] rotate-3 z-10"],
+	3: ["left-[4%] top-6 w-[52%] -rotate-6", "left-[30%] top-0 w-[52%] rotate-3 z-10", "right-0 top-24 w-[44%] -rotate-2 z-20"],
+	4: [
+		"left-0 top-6 w-[46%] -rotate-6",
+		"left-[28%] top-0 w-[46%] rotate-3 z-10",
+		"right-0 top-20 w-[42%] -rotate-2 z-20",
+		"left-[12%] top-40 w-[40%] rotate-6 z-30",
+	],
+}
+---
+
+<article class:list={["relative grid lg:grid-cols-[12rem_1fr] gap-x-16 gap-y-4", !last && "pb-24"]}>
+	<div class="lg:text-right pl-12 lg:pl-0 pt-1">
+		<span class:list={["font-bold", t.date]}>{formatPeriod(d.start, d.end)}</span><br />
+		<span class="text-sm text-black-200">{d.location}</span>
+	</div>
+	<span class:list={["absolute left-[2px] lg:left-[calc(14rem_-_10px)] top-1 w-5 h-5 rounded-full ring-8", t.dot]}></span>
+
+	<div class="pl-12 lg:pl-8 flex flex-col gap-6 min-w-0">
+		{
+			/* Header (media + polaroid layouts place it inside their own text column) */
+			(d.frame.layout === "text" || d.frame.layout === "showcase") && (
+				<div>
+					<h3 class="font-bold text-3xl sm:text-4xl">{d.company}</h3>
+					<p class="text-xl text-black-200 mt-1">{d.role}</p>
+				</div>
+			)
+		}
+
+		{
+			d.frame.layout === "text" && (
+				<div class:list={["bg-white rounded-xl shadow-xl p-6 sm:p-8 flex flex-col gap-6", t.shadow]}>
+					{d.lead && <p class:list={["text-xl leading-snug font-medium border-l-8 pl-5 rounded-none", t.border]}>{d.lead}</p>}
+					{hasBody && (
+						<div class="md-content text-black-200 text-lg">
+							<Content />
+						</div>
+					)}
+				</div>
+			)
+		}
+
+		{
+			d.frame.layout === "showcase" && (
+				<Fragment>
+					<div class:list={["grid md:grid-cols-5 rounded-xl overflow-hidden shadow-xl", t.shadow]}>
+						<div class="md:col-span-3 min-h-[300px]">
+							<Media media={d.frame.media} />
+						</div>
+						<dl class="md:col-span-2 bg-white p-6 sm:p-8 text-sm grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 content-center">
+							{d.frame.specs.map(s => (
+								<Fragment>
+									<dt class:list={["font-bold uppercase tracking-wider text-xs pt-0.5", t.label]}>{s.label}</dt>
+									<dd class="font-medium">{s.value}</dd>
+								</Fragment>
+							))}
+						</dl>
+					</div>
+					{d.lead && <p class="text-xl text-black-100 leading-8">{d.lead}</p>}
+					{hasBody && (
+						<div class="md-content text-black-200 text-lg">
+							<Content />
+						</div>
+					)}
+				</Fragment>
+			)
+		}
+
+		{
+			d.frame.layout === "media" && (
+				<div class:list={["flex max-lg:flex-col gap-x-10 gap-y-6 items-center", d.frame.side === "right" && "lg:flex-row-reverse"]}>
+					<div class="w-full lg:w-1/2 shrink-0">
+						<Media media={d.frame.media} />
+					</div>
+					<div class="flex flex-col gap-5">
+						<div>
+							<h3 class="font-bold text-3xl sm:text-4xl">{d.company}</h3>
+							<p class="text-xl text-black-200 mt-1">{d.role}</p>
+						</div>
+						{d.lead && <p class="text-black-200 leading-8 text-lg">{d.lead}</p>}
+						{hasBody && (
+							<div class="md-content text-black-200 text-lg">
+								<Content />
+							</div>
+						)}
+					</div>
+				</div>
+			)
+		}
+
+		{
+			d.frame.layout === "polaroids" && (
+				<div class="grid md:grid-cols-2 gap-10 items-center">
+					<div class="flex flex-col gap-5">
+						<div>
+							<h3 class="font-bold text-3xl sm:text-4xl">{d.company}</h3>
+							<p class="text-xl text-black-200 mt-1">{d.role}</p>
+						</div>
+						{d.lead && <p class="text-black-200 leading-8 text-lg">{d.lead}</p>}
+						{hasBody && (
+							<div class="md-content text-black-200 text-lg">
+								<Content />
+							</div>
+						)}
+					</div>
+					<div class:list={["relative", photos.length > 3 ? "h-96" : "h-80"]}>
+						{photos.map((p, i) => (
+							<figure class:list={["polaroid absolute", polaroidSpots[photos.length][i]]}>
+								<Media media={p.media} class="aspect-[4/3]" compact />
+								<figcaption class="text-center text-sm mt-2 font-medium text-black-200">{p.caption}</figcaption>
+							</figure>
+						))}
+					</div>
+				</div>
+			)
+		}
+
+		{
+			d.metrics.length > 0 && (
+				<div class="grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-4">
+					{d.metrics.map(m => (
+						<div>
+							<div class:list={["text-3xl sm:text-4xl font-bold", t.value]}>
+								{m.value}
+								{m.suffix && <span class="text-xl opacity-60">{m.suffix}</span>}
+							</div>
+							<div class="text-sm text-black-200 mt-1">{m.label}</div>
+						</div>
+					))}
+				</div>
+			)
+		}
+
+		{
+			d.tags.length > 0 && (
+				<ul class="flex flex-wrap gap-2 text-sm font-medium">
+					{d.tags.map(tag => (
+						<li class:list={["px-3 py-1 rounded-sm", t.pill]}>{tag}</li>
+					))}
+				</ul>
+			)
+		}
+
+		{
+			d.links.length > 0 && (
+				<div class="flex flex-wrap gap-4">
+					{d.links.map(l => (
+						<ButtonLink href={l.href} style={l.style ?? themeButton[theme]} size="lg">
+							{l.label}
+						</ButtonLink>
+					))}
+				</div>
+			)
+		}
+
+		{d.note && <p class="text-sm text-black-200 italic">{d.note}</p>}
+	</div>
+</article>

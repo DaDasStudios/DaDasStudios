@@ -1,42 +1,83 @@
 ---
-import NavElement from "./NavElement.astro"
-import { navbarElements } from "../data"
+import { navigation, resumes, site } from "../data/site"
 ---
 
-<header class="border-b border-zinc-200 top-0 inset-x-0 bg-white fixed z-30">
-	<nav class="px-10 sm:mx-auto max-w-6xl flex items-center justify-between py-8">
-		<a href="/" class="flex items-center justify-center transition-transform hover:-translate-y-1">
-			<img class="w-14 mr-8" src="/images/logo-bg-removed.png" alt="Dadas logo" />
+<header class="border-b border-zinc-200 top-0 inset-x-0 bg-white/95 backdrop-blur fixed z-30">
+	<nav class="px-6 sm:px-10 mx-auto max-w-7xl flex items-center justify-between py-5">
+		<a href="/" class="flex items-center gap-4 transition-transform hover:-translate-y-1">
+			<img class="w-11" src="/images/logo-bg-removed.png" alt="DaDas logo" />
+			<span class="hidden sm:block font-bold tracking-wide">{site.name}</span>
 		</a>
-		<ul class="hidden sm:flex items-center gap-14">
-			{navbarElements.map(element => <NavElement name={element.name} link={element.link} />)}
-			<li>
-				<a
-					href="/contact"
-					class="bg-primary px-4 py-3 text-white font-medium rounded transition-colors hover:bg-primary-600">Contact</a
-				>
+		<ul class="hidden lg:flex items-center gap-10 font-medium text-black-200">
+			{
+				navigation.map(item => (
+					<li class="transition-all hover:-translate-y-1 hover:text-primary relative after:absolute after:rounded after:w-0 hover:after:w-full after:left-1/2 after:-translate-x-1/2 after:duration-500 after:transition-all after:-bottom-1 after:h-1 after:bg-primary">
+						<a href={item.link}>{item.name}</a>
+					</li>
+				))
+			}
+			<li class="relative">
+				<details class="group" data-resume-menu>
+					<summary class="list-none bg-primary px-4 py-3 text-white rounded-sm transition-colors hover:bg-primary-600 flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+						Résumé
+						<svg class="w-4 transition group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+					</summary>
+					<div class="absolute right-0 mt-3 w-72 bg-white rounded-md shadow-2xl border border-zinc-100 p-2 text-sm">
+						{
+							resumes.map(r => (
+								<a
+									href={r.href}
+									target="_blank"
+									class:list={[
+										"flex justify-between items-center rounded-sm px-3 py-3",
+										r.track === "hardware" ? "hover:bg-secondary-100" : "hover:bg-primary-50",
+									]}
+								>
+									<span>{r.label}</span>
+									<span class:list={["text-xs font-semibold", r.track === "hardware" ? "text-secondary-800" : "text-primary-600"]}>PDF</span>
+								</a>
+							))
+						}
+					</div>
+				</details>
 			</li>
 		</ul>
-		<div class="sm:hidden block bg-white shadow-md fixed inset-y-0 px-12 xs:max-sm:px-16 py-12 transition-all duration-500 -left-full overflow-hidden" data-target>
-			<ul class="flex flex-col justify-start items-start gap-8">
-				{navbarElements.map(element => <NavElement name={element.name} link={element.link} />)}
-				<NavElement name="Contact" link="/contact" />
-			</ul>
-		</div>
-		<button aria-label="navigation" class="sm:hidden flex flex-col gap-1 w-[25px] group/button" data-collapse>
+		<button aria-label="Open navigation" aria-expanded="false" class="lg:hidden flex flex-col gap-1 w-[25px] group/button" data-collapse>
 			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
 			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
 			<span class="h-1 rounded-xl bg-primary group-hover/button:bg-primary-600 w-full"></span>
 		</button>
 	</nav>
+	<div class="lg:hidden bg-white shadow-md fixed inset-y-0 w-72 px-10 py-12 transition-all duration-500 -left-full overflow-y-auto" data-target>
+		<ul class="flex flex-col items-start gap-7 font-medium text-black-100">
+			{navigation.map(item => <li><a class="hover:text-primary" href={item.link}>{item.name}</a></li>)}
+			<li class="pt-4 border-t border-zinc-200 w-full flex flex-col gap-4">
+				<span class="text-sm text-black-200">Résumé</span>
+				{resumes.map(r => <a class="hover:text-primary" href={r.href} target="_blank">{r.label}</a>)}
+			</li>
+		</ul>
+	</div>
 </header>
+
 <script>
-	const target = document.querySelector("[data-target]") as HTMLDivElement
-	const collapse = document.querySelector("[data-collapse]") as HTMLButtonElement
+	const target = document.querySelector<HTMLElement>("[data-target]")!
+	const collapse = document.querySelector<HTMLButtonElement>("[data-collapse]")!
 
 	collapse.addEventListener("click", () => {
-		const className = "left-0"
-		target.classList.toggle("-left-full")
-		target.classList.toggle(className)
+		const open = target.classList.toggle("left-0")
+		target.classList.toggle("-left-full", !open)
+		collapse.setAttribute("aria-expanded", String(open))
+	})
+	target.querySelectorAll("a").forEach(a =>
+		a.addEventListener("click", () => {
+			target.classList.remove("left-0")
+			target.classList.add("-left-full")
+		})
+	)
+
+	// Close the résumé menu when clicking outside
+	const menu = document.querySelector<HTMLDetailsElement>("[data-resume-menu]")!
+	document.addEventListener("click", e => {
+		if (menu.open && !menu.contains(e.target as Node)) menu.open = false
 	})
 </script>

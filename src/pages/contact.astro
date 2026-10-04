@@ -1,15 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro"
+import { site } from "../data/site"
 ---
 
-<Layout title="Contact - Desarrollador Web Full-stack">
+<Layout title="Contact">
 	<main class="min-h-screen bg-cover bg-plane border-b-[20px] border-b-primary">
 		<section class="bg-primary-50 mx-6 sm:mx-auto max-w-xl mt-44 p-6 sm:p-12 rounded-md">
 			<h1 class="font-bold text-4xl xs:text-5xl text-center text-black-100 mt-6 tracking-tight">Let's work together</h1>
 			<p class="text-center text-lg text-black-200 mt-10 mb-16 sm:leading-10">
-				You can contact me via this form or you can just send a mail to <span class="text-primary font-medium"
-					>dadastudios382@gmail.com</span
-				>
+				You can contact me via this form or you can just send a mail to <span class="text-primary font-medium">{site.email}</span>
 			</p>
 			<form id="contact-form">
 				<div class="flex flex-col gap-8">

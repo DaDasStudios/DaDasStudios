@@ -1,31 +1,195 @@
-@tailwind base;
+@import "tailwindcss";
 
-html {
-	scroll-behavior: smooth;
+@theme {
+	--breakpoint-xs: 480px;
+
+	--color-black-100: #27272a;
+	--color-black-200: #3f3f46;
+	--color-background: #fafafa;
+	--color-accent: #95132f;
+
+	--color-primary: #e5345a;
+	--color-primary-50: #fdedf0;
+	--color-primary-100: #fad6de;
+	--color-primary-200: #f5aebd;
+	--color-primary-300: #ef859c;
+	--color-primary-400: #ea5c7b;
+	--color-primary-500: #e5345a;
+	--color-primary-600: #c7193f;
+	--color-primary-700: #95132f;
+	--color-primary-800: #630d20;
+	--color-primary-900: #320610;
+	--color-primary-950: #1b0309;
+
+	--color-secondary: #66eace;
+	--color-secondary-50: #f6fefc;
+	--color-secondary-100: #edfdf9;
+	--color-secondary-200: #e0fbf5;
+	--color-secondary-300: #cef8ef;
+	--color-secondary-400: #c0f6eb;
+	--color-secondary-500: #aef4e5;
+	--color-secondary-600: #66eace;
+	--color-secondary-700: #1edcb3;
+	--color-secondary-800: #149478;
+	--color-secondary-900: #0a483a;
+	--color-secondary-950: #05241d;
+
+	--animate-marquee: marquee 70s linear infinite;
+	--animate-flow: flow 1.2s linear infinite;
+
+	@keyframes marquee {
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+	@keyframes flow {
+		to {
+			stroke-dashoffset: -24;
+		}
+	}
 }
 
-.form-control {
-	@apply text-lg font-medium p-5 rounded-md bg-primary-100 text-primary placeholder:text-primary focus:border-2 focus:border-primary focus:ring-4 focus:ring-primary-200 focus:outline-none;
+@utility bg-blurry {
+	background-image: url("/images/backgrounds/bg-blurry.svg");
+}
+@utility bg-blurry-2 {
+	background-image: url("/images/backgrounds/bg-blurry-2.svg");
+}
+@utility bg-plane {
+	background-image: url("/images/backgrounds/bg-plane.svg");
+}
+@utility bg-print {
+	background-image: url("/images/backgrounds/bg-print.svg");
 }
 
-.skills-list {
-	@apply grid grid-cols-2 justify-center items-center gap-3 text-center px-4 pb-4;
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+	body {
+		@apply bg-background text-black-100 antialiased;
+	}
+	button,
+	summary {
+		cursor: pointer;
+	}
+}
+
+@layer components {
+	.form-control {
+		@apply text-lg font-medium p-5 rounded-md bg-primary-100 text-primary placeholder:text-primary focus:border-2 focus:border-primary focus:ring-4 focus:ring-primary-200 focus:outline-none;
+	}
+
+	/* Dashed box shown where a real image is still missing */
+	.placeholder-box {
+		@apply relative flex items-center justify-center text-center font-medium text-sm p-3 border-2 border-dashed bg-print;
+		background-size: 700px;
+	}
+
+	/* Hardware PCB renders and illustrations get a subtle 3D tilt */
+	.media-tilt {
+		transform: perspective(900px) rotateX(28deg) rotateZ(-14deg);
+		transition: transform 0.6s;
+	}
+	.media-tilt:hover {
+		transform: perspective(900px) rotateX(10deg) rotateZ(-4deg);
+	}
+
+	.polaroid {
+		@apply bg-white p-2.5 pb-8 shadow-[0_10px_25px_-10px_rgba(0,0,0,0.35)];
+	}
+
+	.marquee:hover {
+		animation-play-state: paused;
+	}
+
+	/* Rendered Markdown (experience details, project deep dives, stories) */
+	.md-content {
+		@apply leading-8;
+	}
+	.md-content > * + * {
+		@apply mt-4;
+	}
+	.md-content ul {
+		@apply list-disc pl-6 space-y-2;
+	}
+	.md-content ol {
+		@apply list-decimal pl-6 space-y-2;
+	}
+	.md-content a {
+		@apply text-primary font-medium underline underline-offset-4;
+	}
+	.md-content strong {
+		@apply text-black-100;
+	}
+	.md-content h1,
+	.md-content h2 {
+		@apply text-3xl font-bold text-black-100 mt-12 mb-4;
+	}
+	.md-content h3 {
+		@apply text-2xl font-bold text-black-100 mt-10 mb-3;
+	}
+	.md-content blockquote {
+		@apply bg-secondary-100 text-secondary-950 font-medium rounded-md p-8 border-l-8 border-secondary;
+	}
+	.md-content img {
+		@apply rounded-md w-full;
+	}
+	.md-content pre {
+		@apply rounded-md p-6 text-sm overflow-x-auto;
+	}
+	.md-content :not(pre) > code {
+		@apply bg-zinc-100 text-primary-700 rounded-sm px-1.5 py-0.5 text-[0.9em];
+	}
+	.md-content iframe {
+		@apply w-full aspect-video rounded-md border-0;
+	}
+
+	.md-article {
+		@apply text-lg text-black-200;
+	}
+	.md-article > :first-child {
+		@apply mt-0;
+	}
+
+	/* Story chapters: each ## heading becomes a numbered step */
+	.md-chapters {
+		@apply text-lg text-black-200;
+		counter-reset: chapter;
+	}
+	.md-chapters h2 {
+		@apply relative pl-16 text-2xl mt-12 first:mt-0;
+		counter-increment: chapter;
+	}
+	.md-chapters h2::before {
+		content: counter(chapter, decimal-leading-zero);
+		@apply absolute left-0 -top-1 w-12 h-12 rounded-full bg-primary text-white text-base flex items-center justify-center;
+	}
+	.md-chapters h2:nth-of-type(even)::before {
+		@apply bg-secondary;
+	}
+	.md-chapters h2 ~ :not(h2) {
+		@apply ml-16;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-marquee,
+	.animate-flow {
+		animation: none;
+	}
 }
 
 /* SCROLLBAR */
-
 ::-webkit-scrollbar {
 	@apply w-3 h-3;
 }
-
 ::-webkit-scrollbar-track {
-	@apply rounded-sm bg-transparent;
+	@apply rounded-xs bg-transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-	@apply rounded-sm bg-primary;
+	@apply rounded-xs bg-primary;
 }
-
 ::-webkit-scrollbar-thumb:hover {
 	@apply bg-primary-600;
 }

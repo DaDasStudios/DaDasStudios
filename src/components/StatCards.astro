@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { themeOf, themes } from "../lib/theme"
+
+interface Props {
+	highlights: CollectionEntry<"highlights">[]
+}
+
+// Cards come from the `cards` field of each highlight, in highlight order
+const cards = Astro.props.highlights.flatMap(h => h.data.cards.map(c => ({ ...c, theme: c.theme ?? themeOf(h.data.track, h.data.theme) })))
+---
+
+{
+	cards.length > 0 && (
+		<section class="max-w-7xl mx-auto px-6 sm:px-12 pb-24">
+			<ul class="grid grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-4">
+				{cards.map((c, i) => (
+					<li
+						class:list={[
+							"rounded-md p-6",
+							themes[c.theme].soft,
+							i === cards.length - 1 && cards.length % 2 === 1 && "col-span-2 md:col-span-1",
+						]}
+					>
+						<div class:list={["text-4xl font-bold", themes[c.theme].value]}>
+							{c.value}
+							{c.suffix && <span class="text-xl opacity-60">{c.suffix}</span>}
+						</div>
+						<div class:list={["text-sm font-medium mt-2", themes[c.theme].label]}>{c.label}</div>
+					</li>
+				))}
+			</ul>
+		</section>
+	)
+}

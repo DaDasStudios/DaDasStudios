@@ -1,0 +1,119 @@
+---
+import type { Media as MediaType, Theme } from "../lib/schemas"
+import { themes } from "../lib/theme"
+import Media from "./Media.astro"
+
+interface Props {
+	items: { category: string; media: MediaType; caption?: string }[]
+	theme: Theme
+}
+
+const { items, theme } = Astro.props
+const categories = [...new Set(items.map(i => i.category))]
+const t = themes[theme]
+const captionOf = (i: Props["items"][number]) => i.caption ?? i.media.caption ?? ""
+---
+
+<div data-gallery>
+	{
+		categories.length > 1 && (
+			<div role="tablist" aria-label="Gallery categories" class="flex flex-wrap gap-2 mb-4">
+				{categories.map((c, i) => (
+					<button
+						role="tab"
+						data-gallery-tab={c}
+						aria-selected={i === 0 ? "true" : "false"}
+						class="px-4 py-2 rounded-sm font-semibold text-sm transition bg-white text-black-200 shadow-sm aria-selected:bg-secondary aria-selected:text-white aria-selected:shadow-none hover:bg-secondary-100"
+					>
+						{c}
+					</button>
+				))}
+			</div>
+		)
+	}
+
+	<div class:list={["rounded-xl overflow-hidden border-b-8 shadow-xl bg-white", t.border]}>
+		{
+			items.map((item, i) => (
+				<div data-gallery-panel={i} data-category={item.category} data-caption={captionOf(item)} class:list={["aspect-video", i !== 0 && "hidden"]}>
+					{item.media.type === "image" ? (
+						<button
+							data-lightbox={item.media.src}
+							data-alt={item.media.alt}
+							aria-label={`Enlarge: ${item.media.alt}`}
+							class="group/zoom relative block w-full h-full"
+						>
+							<Media media={item.media} eager={i === 0} />
+							<span class="absolute top-3 right-3 bg-black/70 text-white text-xs font-semibold px-3 py-1.5 rounded-full opacity-0 transition group-hover/zoom:opacity-100 group-focus-visible/zoom:opacity-100">
+								Enlarge
+							</span>
+						</button>
+					) : (
+						<Media media={item.media} />
+					)}
+				</div>
+			))
+		}
+	</div>
+	<p data-gallery-caption class="text-sm text-black-200 mt-3 min-h-5">{items[0] && captionOf(items[0])}</p>
+
+	{
+		items.length > 1 && (
+			<div class="grid grid-cols-4 sm:grid-cols-6 gap-3 mt-4">
+				{items.map((item, i) => (
+					<button
+						data-gallery-thumb={i}
+						aria-label={`Show ${item.category}: ${captionOf(item) || i + 1}`}
+						aria-current={i === 0 ? "true" : "false"}
+						class="aspect-square rounded-md overflow-hidden ring-offset-2 aria-[current=true]:ring-4 aria-[current=true]:ring-secondary transition"
+					>
+						{item.media.type === "embed" || item.media.type === "html" ? (
+							<span class="w-full h-full flex items-center justify-center bg-black-100 text-white text-xs font-semibold p-1">{item.category}</span>
+						) : (
+							<Media media={item.media} compact />
+						)}
+					</button>
+				))}
+			</div>
+		)
+	}
+
+	<dialog data-lightbox-dialog class="m-auto max-w-[95vw] max-h-[95vh] bg-transparent p-0 backdrop:bg-black/80">
+		<form method="dialog" class="relative">
+			<img alt="" class="max-w-[95vw] max-h-[90vh] object-contain rounded-md" />
+			<button class="absolute top-3 right-3 w-10 h-10 rounded-full bg-white text-black-100 font-bold" aria-label="Close">✕</button>
+		</form>
+	</dialog>
+</div>
+
+<script>
+	document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(gallery => {
+		const panels = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-panel]")]
+		const thumbs = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-thumb]")]
+		const tabs = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-tab]")]
+		const caption = gallery.querySelector<HTMLElement>("[data-gallery-caption]")!
+		const dialog = gallery.querySelector<HTMLDialogElement>("[data-lightbox-dialog]")!
+		const dialogImg = dialog.querySelector("img")!
+
+		function show(i: number) {
+			panels.forEach((p, j) => p.classList.toggle("hidden", i !== j))
+			thumbs.forEach((t, j) => t.setAttribute("aria-current", String(i === j)))
+			const category = panels[i].dataset.category
+			tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.galleryTab === category)))
+			caption.textContent = panels[i].dataset.caption ?? ""
+		}
+
+		thumbs.forEach((t, i) => t.addEventListener("click", () => show(i)))
+		tabs.forEach(t =>
+			t.addEventListener("click", () => show(panels.findIndex(p => p.dataset.category === t.dataset.galleryTab)))
+		)
+		gallery.querySelectorAll<HTMLElement>("[data-lightbox]").forEach(b =>
+			b.addEventListener("click", () => {
+				dialogImg.src = b.dataset.lightbox!
+				dialogImg.alt = b.dataset.alt ?? ""
+				dialog.showModal()
+			})
+		)
+		dialog.addEventListener("click", e => e.target === dialog && dialog.close())
+	})
+</script>

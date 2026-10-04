@@ -1,0 +1,34 @@
+<!doctype html>
+<!--
+	Example embed. Any self-contained HTML page in /public/embeds can be shown in a gallery,
+	an architecture section or a highlight with: { type: "embed", src: "/embeds/<file>.html", title: "..." }.
+	Replace these placeholder traces with a real plot (e.g. exported from Python/Plotly).
+-->
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>EEG and accelerometer traces</title>
+		<style>
+			html, body { margin: 0; height: 100%; background: #27272a; font-family: ui-sans-serif, system-ui, sans-serif; }
+			svg { width: 100%; height: 100%; display: block; }
+		</style>
+	</head>
+	<body>
+		<svg viewBox="0 0 600 300" preserveAspectRatio="none" role="img" aria-label="Placeholder EEG and accelerometer traces">
+			<path id="eeg" fill="none" stroke="#66EACE" stroke-width="2" vector-effect="non-scaling-stroke" />
+			<path id="acc" fill="none" stroke="#E5345A" stroke-width="2" vector-effect="non-scaling-stroke" />
+			<text x="12" y="24" fill="#a1a1aa" font-size="13">EEG · placeholder trace</text>
+			<text x="12" y="174" fill="#a1a1aa" font-size="13">Accelerometer · placeholder trace</text>
+		</svg>
+		<script>
+			const wave = (y0, amp, seed) =>
+				Array.from({ length: 300 }, (_, i) => {
+					const n = Math.sin(i * 0.31 + seed) * 0.6 + Math.sin(i * 1.7 + seed * 2) * 0.4 + (i > 150 && i < 190 ? Math.sin(i * 0.5) * 2 : 0)
+					return `${i ? "L" : "M"}${i * 2} ${(y0 + n * amp).toFixed(1)}`
+				}).join(" ")
+			document.getElementById("eeg").setAttribute("d", wave(90, 22, 1))
+			document.getElementById("acc").setAttribute("d", wave(240, 16, 4))
+		</script>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Media from "./Media.astro"
+
+interface Props {
+	kind: "hardware" | "software"
+	eyebrow: string
+	title: string
+	cta: string
+	projects: CollectionEntry<"projects">[]
+}
+
+const { kind, eyebrow, title, cta, projects } = Astro.props
+const hw = kind === "hardware"
+---
+
+<div
+	data-door={kind}
+	class:list={[
+		"rounded-xl p-8 flex flex-col gap-6 transition hover:-translate-y-1 hover:shadow-2xl",
+		hw ? "bg-secondary-100 hover:shadow-secondary" : "bg-primary-50 hover:shadow-primary-200",
+	]}
+>
+	<div class="flex items-center justify-between gap-4">
+		<div>
+			<span class:list={["text-xs font-bold uppercase tracking-widest", hw ? "text-secondary-800" : "text-primary-600"]}>{eyebrow}</span>
+			<h3 class:list={["text-3xl font-bold mt-2", hw ? "text-secondary-950" : "text-primary-900"]}>{title}</h3>
+		</div>
+		<span class:list={["text-5xl font-bold", hw ? "text-secondary-600" : "text-primary-300"]}>
+			{String(projects.length).padStart(2, "0")}
+		</span>
+	</div>
+	<div class="grid grid-cols-3 gap-3">
+		{
+			projects.slice(0, 3).map(p => (
+				<a href={`/projects/${p.id}`} class="group/p flex flex-col gap-2">
+					<Media media={p.data.cover} class="aspect-square rounded-md bg-white" compact />
+					<span class:list={["text-sm font-semibold group-hover/p:underline", hw ? "text-secondary-950" : "text-primary-900"]}>{p.data.title}</span>
+				</a>
+			))
+		}
+	</div>
+	<a
+		href={`/${kind}`}
+		class:list={[
+			"w-fit flex gap-4 py-4 px-6 transition text-white font-medium rounded-sm",
+			hw ? "bg-secondary hover:bg-secondary-700" : "bg-primary hover:bg-primary-600",
+		]}
+		>{cta} <span aria-hidden="true">→</span></a
+	>
+</div>

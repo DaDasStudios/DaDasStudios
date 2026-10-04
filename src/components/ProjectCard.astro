@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { projectTheme, themeOf, themes } from "../lib/theme"
+import Media from "./Media.astro"
+
+interface Props {
+	project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const d = project.data
+const t = themes[projectTheme(d.track)]
+---
+
+<article class:list={["group flex flex-col rounded-xl overflow-hidden bg-white shadow-lg transition hover:-translate-y-1 hover:shadow-2xl", t.shadow]}>
+	<a href={`/projects/${project.id}`} class="relative block aspect-[4/3] overflow-hidden" tabindex="-1" aria-hidden="true">
+		<Media media={d.cover} class="transition duration-500 group-hover:scale-105" />
+	</a>
+	<div class:list={["flex flex-col gap-3 p-6 grow", t.soft]}>
+		<div class="flex flex-wrap gap-2">
+			{d.period && <span class="text-xs font-bold uppercase tracking-widest opacity-70">{d.period}</span>}
+		</div>
+		<h3 class="text-2xl font-bold"><a href={`/projects/${project.id}`} class="hover:underline">{d.title}</a></h3>
+		<p class="opacity-80 leading-7 grow">{d.summary}</p>
+		<ul class="flex flex-wrap gap-2 text-xs font-semibold mt-2">
+			{d.stack.slice(0, 4).map(s => <li class="bg-white/70 px-2 py-1 rounded-sm">{s.name}</li>)}
+		</ul>
+	</div>
+</article>

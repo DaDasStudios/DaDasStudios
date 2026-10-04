@@ -1,23 +1,23 @@
 ---
-import { socialMediaFooter } from "../data"
-import SocialElementFooter from "./SocialElementFooter.astro"
-const currYear = new Date().getFullYear()
+import { sections } from "../data/personal"
+import { site, socials } from "../data/site"
+const year = new Date().getFullYear()
 ---
 
 <footer class="flex py-20 px-10 bg-black text-white text-center">
 	<div class="max-w-4xl mx-auto flex flex-col gap-10">
-		<h4 class="text-xl md:text-2xl">
-			Made with <span class="text-primary font-medium">love</span> with <b>Astro & Tailwind</b>
-		</h4>
+		<h4 class="text-xl md:text-2xl" set:html={sections.footer} />
 		<ul class="flex gap-4 items-center justify-center">
 			{
-				socialMediaFooter.map(social => (
-					<SocialElementFooter link={social.link} name={social.name}>
-						<img alt={social.name} src={social.icon} class="object-contain w-8 h-8" />
-					</SocialElementFooter>
+				socials.map(social => (
+					<li class="border-b-2 border-transparent hover:border-b-primary">
+						<a href={social.link} target="_blank" rel="noopener" aria-label={social.name}>
+							<img alt="" src={social.icon} class="object-contain w-8 h-8" />
+						</a>
+					</li>
 				))
 			}
 		</ul>
-		<p class="md:text-lg">{currYear} &copy; All Rights Reserved @Dadastudios</p>
+		<p class="md:text-lg">{year} &copy; {site.fullName}</p>
 	</div>
 </footer>

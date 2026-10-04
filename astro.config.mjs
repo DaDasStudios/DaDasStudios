@@ -1,9 +1,10 @@
-import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
-import tailwind from "@astrojs/tailwind";
+import { defineConfig } from "astro/config"
+import tailwindcss from "@tailwindcss/vite"
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()]
-});
+	site: "https://dadastudios-portfolio.vercel.app",
+	vite: {
+		plugins: [tailwindcss()],
+	},
+})

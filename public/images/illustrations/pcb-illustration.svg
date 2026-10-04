@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230" role="img" aria-label="Illustrative circuit board">
+	<rect x="4" y="4" width="332" height="222" rx="16" fill="#0A483A" stroke="#149478" stroke-width="3"/>
+	<g fill="#05241D" stroke="#CEF8EF" stroke-width="2">
+		<circle cx="22" cy="22" r="7"/><circle cx="318" cy="22" r="7"/><circle cx="22" cy="208" r="7"/><circle cx="318" cy="208" r="7"/>
+	</g>
+	<g stroke="#66EACE" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+		<path d="M128 70 H170 V40 H250"/><path d="M128 90 H190 V80 H262"/><path d="M128 110 H210 V125 H262"/>
+		<path d="M128 130 H160 V170 H230"/><path d="M128 150 H145 V190 H290"/><path d="M60 175 V198 H120"/>
+		<path d="M262 80 H300 V60"/><path d="M262 125 H300 V150"/>
+	</g>
+	<g fill="#CEF8EF">
+		<circle cx="170" cy="40" r="4.5"/><circle cx="190" cy="80" r="4.5"/><circle cx="210" cy="125" r="4.5"/><circle cx="160" cy="170" r="4.5"/>
+		<circle cx="145" cy="190" r="4.5"/><circle cx="300" cy="60" r="4.5"/><circle cx="300" cy="150" r="4.5"/>
+	</g>
+	<rect x="40" y="50" width="88" height="118" rx="5" fill="#05241D" stroke="#66EACE" stroke-width="2"/>
+	<rect x="50" y="60" width="68" height="40" rx="3" fill="#149478" opacity=".5"/>
+	<text x="84" y="138" fill="#CEF8EF" font-size="15" font-weight="700" text-anchor="middle" font-family="ui-monospace,monospace">ESP32</text>
+	<rect x="250" y="30" width="22" height="20" rx="2" fill="#E5345A"/>
+	<rect x="262" y="70" width="34" height="24" rx="3" fill="#18181b" stroke="#a1a1aa"/>
+	<rect x="262" y="112" width="34" height="24" rx="3" fill="#18181b" stroke="#a1a1aa"/>
+	<rect x="230" y="160" width="22" height="20" rx="2" fill="#E5345A"/>
+	<g fill="#FAD6DE">
+		<rect x="120" y="200" width="10" height="14" rx="2"/><rect x="140" y="200" width="10" height="14" rx="2"/><rect x="160" y="200" width="10" height="14" rx="2"/><rect x="180" y="200" width="10" height="14" rx="2"/>
+		<rect x="200" y="200" width="10" height="14" rx="2"/><rect x="220" y="200" width="10" height="14" rx="2"/><rect x="240" y="200" width="10" height="14" rx="2"/><rect x="260" y="200" width="10" height="14" rx="2"/>
+	</g>
+	<text x="318" y="196" fill="#CEF8EF" font-size="10" text-anchor="end" font-family="ui-monospace,monospace" opacity=".8">DADAS · REV A</text>
+</svg>

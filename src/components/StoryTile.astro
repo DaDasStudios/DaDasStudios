@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { storyHref } from "../lib/content"
+import { themes } from "../lib/theme"
+
+interface Props {
+	story: CollectionEntry<"stories">
+}
+
+const { story } = Astro.props
+const { tile, eyebrow, title, summary } = story.data
+const t = themes[tile.theme]
+const href = storyHref(story)
+const external = Boolean(story.data.externalUrl)
+const Tag = href ? "a" : "div"
+
+const size = {
+	large: "md:col-span-2 md:row-span-2",
+	wide: "md:col-span-2",
+	small: "",
+	full: "md:col-span-4",
+}[tile.size]
+
+const collage = tile.images.length > 0
+const pianoKeys = Array.from({ length: 21 }, (_, i) => [1, 2, 4, 5, 6].includes(i % 7))
+---
+
+<Tag
+	href={href}
+	target={external ? "_blank" : undefined}
+	rel={external ? "noopener" : undefined}
+	class:list={[
+		"group relative rounded-xl overflow-hidden flex flex-col transition",
+		href && "hover:-translate-y-1 hover:shadow-2xl",
+		t.soft,
+		size,
+		!collage && "p-7 justify-between gap-6 min-h-[200px]",
+		tile.size === "full" && "md:flex-row md:items-center",
+	]}
+>
+	{
+		tile.decoration === "piano" && (
+			<div class="absolute inset-y-0 right-0 w-1/2 opacity-25 flex pointer-events-none" aria-hidden="true">
+				{pianoKeys.map(black => (
+					<div class="flex-1 border-l border-white relative">{black && <div class="absolute -left-[30%] w-[60%] h-3/5 bg-white" />}</div>
+				))}
+			</div>
+		)
+	}
+	{tile.decoration === "grid" && <div class="absolute inset-0 bg-plane opacity-30 pointer-events-none" aria-hidden="true" />}
+
+	{
+		collage && (
+			<div class="grid grid-cols-3 grid-rows-2 gap-1 h-[300px] md:h-[330px] overflow-hidden">
+				{tile.images.map((img, i) => (
+					<img
+						src={img.src}
+						alt={img.alt}
+						loading="lazy"
+						style={img.position ? `object-position: ${img.position}` : undefined}
+						class:list={[
+							"w-full h-full min-h-0 object-cover",
+							i === 0 && "col-span-2 row-span-2 transition duration-500 group-hover:scale-105",
+							tile.images.length === 1 && "col-span-3",
+							tile.images.length === 2 && i === 1 && "row-span-2",
+						]}
+					/>
+				))}
+			</div>
+		)
+	}
+
+	<div class:list={["relative flex justify-between gap-6", collage ? "p-7 items-end grow" : "flex-col h-full", tile.size === "full" && "md:flex-row md:items-center md:w-full"]}>
+		<div class="flex flex-col gap-2">
+			<span class:list={["text-xs font-bold uppercase tracking-widest", t.label]}>{eyebrow}</span>
+			{(collage || tile.size !== "small" || !tile.value) && <h3 class="text-2xl sm:text-3xl font-bold">{title}</h3>}
+			{collage && <p class:list={[t.label]}>{summary}</p>}
+		</div>
+		{
+			tile.value && !collage && (
+				<div class:list={[tile.size !== "small" && "md:text-right"]}>
+					<div class:list={["text-5xl sm:text-6xl font-bold", t.value]}>{tile.value}</div>
+					{tile.label && <p class="font-semibold mt-1">{tile.label}</p>}
+				</div>
+			)
+		}
+		{
+			href && (
+				<span
+					aria-hidden={tile.cta ? undefined : "true"}
+					class:list={[
+						"shrink-0 self-start md:self-end bg-primary text-white flex items-center justify-center transition group-hover:translate-x-1",
+						tile.cta ? "px-6 py-3 rounded-sm font-medium" : "w-12 h-12 rounded-full",
+					]}
+				>
+					{tile.cta ?? "→"}
+				</span>
+			)
+		}
+	</div>
+</Tag>

@@ -12,7 +12,7 @@ export const hero = {
 		{ text: "." },
 	],
 	description:
-		"Electronics engineering student at Universidad de Ibagué, Colombia, and integration developer for retail clients in Europe.",
+		"Electronics engineering student at Universidad de Ibagué, Colombia, and Integration Developer for a major global healthcare client",
 	actions: [
 		{ label: "Experience", href: "#experience", style: "primary" },
 		{ label: "Projects", href: "#doors", style: "secondary" },
